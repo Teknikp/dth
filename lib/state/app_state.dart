@@ -9,10 +9,10 @@ import '../models/progress.dart';
 
 class AppState extends ChangeNotifier {
   AppState({
-    required this._prefs,
+    required SharedPreferences prefs,
     required this.locale,
     required this.progress,
-  });
+  }) : _prefs = prefs; // ignore: prefer_initializing_formals
 
   final SharedPreferences _prefs;
   AppLocale locale;
