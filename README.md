@@ -21,26 +21,22 @@ Web is included so the flow can be checked in a browser. The layout is mobile-fi
 
 ### Android emulator (Windows)
 
-Gradle configure calls `sdkmanager` if a platform or NDK is missing. That needs Google’s SDK source lists **while you are online**. A failure often surfaces at `android/build.gradle.kts` line 19 (`evaluationDependsOn(":app")`) even though `:app` is the project that actually failed.
+Flutter 3.47 compiles against **API 36** and NDK **28.2.13676358** (`flutter.compileSdkVersion` / `flutter.ndkVersion`). Gradle configure calls `sdkmanager` if those packages are missing. That needs Google’s SDK source lists **while you are online**. A failure often surfaces at `android/build.gradle.kts` line 19 (`evaluationDependsOn(":app")`) even though `:app` is the project that actually failed.
 
-This app compiles against **API 35**. With Android Studio’s SDK Manager (or cmdline-tools), install and accept licenses, then retry:
+Install and accept licenses, then retry:
 
 ```bat
 flutter doctor -v
 flutter doctor --android-licenses
 
 rem From a terminal where ANDROID_HOME (or ANDROID_SDK_ROOT) is the Android SDK:
-sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "platform-tools" "ndk;28.2.13676358"
 sdkmanager --list_installed
 
 flutter run -d emulator-5554
 ```
 
-If Gradle still asks for Flutter’s default NDK:
-
-```bat
-sdkmanager --install "ndk;28.2.13676358"
-```
+In Android Studio’s SDK Manager, that is **Android API 36**, matching **SDK Build-Tools 36.0.0**, and **NDK (Side by side) 28.2.13676358**.
 
 `Warning: Failed to download any source lists!` / `IO exception while downloading manifest` means `sdkmanager` cannot reach `dl.google.com`. Use Android Studio’s SDK Manager on the same machine (it uses the same SDK path), or fix proxy/firewall, then run the installs above. Do not expect configure to succeed offline if those packages are not already installed.
 
