@@ -6,8 +6,11 @@ plugins {
 
 android {
     namespace = "ca.dth.licence_prep"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // Flutter 3.47's flutter.compileSdkVersion is 36. That makes AGP/sdkmanager
+    // fetch platforms;android-36 (and often NDK 28.2) during Gradle configure.
+    // Pin 35 so a typical Android Studio SDK works without a configure-time
+    // download of Google's source lists.
+    compileSdk = 35
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -20,7 +23,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 35
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
         // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
         // You can force using the value of versionCode by specifying the `-P force-version-code-ignoring-abi=true`

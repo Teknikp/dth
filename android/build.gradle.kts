@@ -16,6 +16,8 @@ subprojects {
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 subprojects {
+    // Failures while configuring :app (missing Android platforms / NDK,
+    // sdkmanager download errors) are reported against this block.
     project.evaluationDependsOn(":app")
 }
 
