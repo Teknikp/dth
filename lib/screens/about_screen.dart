@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../models/jurisdiction.dart';
+import '../data/catalog.dart';
+import '../data/presented.dart';
+import '../state/app_state.dart';
 import '../widgets/disclaimer_banner.dart';
+import '../widgets/hero_header.dart';
 import '../widgets/source_links.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -9,68 +12,56 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-        children: [
-          Text(
-            'About',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'A v1 study aid for people looking up how to get a passenger-vehicle licence in a Canadian province or territory, and practising knowledge-test topics.',
-            style: theme.textTheme.bodyMedium?.copyWith(height: 1.4),
-          ),
-          const SizedBox(height: 16),
-          const DisclaimerBanner(),
-          const SizedBox(height: 20),
-          Text(
-            'What this app is',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Summaries of graduated licensing, tests, documents, medical/vision notes, and fees when a government or Crown insurer page published a number. Practice quizzes on signs, rules, impairment, and winter driving. No account is required.',
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'What this app is not',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'It is not the official test, not legal advice, and not a complete copy of any handbook. If a fee or rule was not on the official page we reviewed, the app says so and points you to that page instead of inventing a number.',
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'English first',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'This version is English only. Several jurisdictions offer tests and handbooks in French or other languages — use the official links.',
-          ),
-          const SizedBox(height: 20),
-          const SourceLinks(
-            links: [
-              OfficialLink(
-                label: 'Transport Canada — road safety',
-                url: 'https://tc.canada.ca/en/road-safety',
+    final s = AppScope.s(context);
+    final locale = AppScope.of(context).locale;
+    final links = <PresentedLink>[];
+    final seen = <String>{};
+    for (final j in allJurisdictions) {
+      for (final link in PresentedJurisdiction.from(j, locale).sources) {
+        if (seen.add(link.url)) links.add(link);
+      }
+    }
+    return Column(
+      children: [
+        HeroHeader(title: s.aboutTitle, subtitle: s.aboutLead),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 32),
+            children: [
+              const DisclaimerBanner(),
+              const SizedBox(height: 16),
+              Text(s.aboutBody, style: Theme.of(context).textTheme.bodyLarge),
+              const SizedBox(height: 20),
+              Text(s.language, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(s.languageBody),
+              const SizedBox(height: 20),
+              Text(s.whatItIs, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(s.whatItIsBody),
+              const SizedBox(height: 20),
+              Text(
+                s.whatItIsNot,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
+              const SizedBox(height: 8),
+              Text(s.whatItIsNotBody),
+              const SizedBox(height: 20),
+              Text(
+                s.officialSources,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                s.officialPageMayBeEn,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 12),
+              SourceLinks(links: links),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

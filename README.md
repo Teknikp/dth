@@ -24,7 +24,8 @@ Web is included so the flow can be checked in a browser. The layout is mobile-fi
 - Pick a province or territory, then read GDL stages, knowledge vs road tests, documents, medical/vision notes, and fees **only when published**.
 - Official source buttons and handbook links on each jurisdiction page.
 - Practice quizzes with immediate explanations, clearly labelled unofficial.
-- English only, no accounts.
+- English and French in-app, with a persistent EN/FR toggle. Official legal pages stay linked in the government’s language.
+- On-device progress mapping (pick a province, check off knowledge/vision/road/GDL stages). No accounts.
 
 ## Gaps
 

@@ -1,6 +1,8 @@
+import '../l10n/app_locale.dart';
 import '../models/jurisdiction.dart';
 import 'central.dart';
 import 'east.dart';
+import 'french/catalog_fr.dart';
 import 'north.dart';
 import 'west.dart';
 
@@ -28,13 +30,18 @@ Jurisdiction? jurisdictionByCode(String code) {
   return null;
 }
 
-List<Jurisdiction> searchJurisdictions(String query) {
+List<Jurisdiction> searchJurisdictions(
+  String query, {
+  AppLocale locale = AppLocale.en,
+}) {
   final q = query.trim().toLowerCase();
   if (q.isEmpty) return List<Jurisdiction>.from(allJurisdictions);
   return allJurisdictions.where((j) {
     if (j.code.toLowerCase() == q) return true;
     if (q.length <= 2) return false;
+    final frName = frenchFor(j.code)?.name.toLowerCase();
     if (j.name.toLowerCase().contains(q)) return true;
+    if (frName != null && frName.contains(q)) return true;
     if (q.length >= 4 && j.authority.toLowerCase().contains(q)) return true;
     return false;
   }).toList();

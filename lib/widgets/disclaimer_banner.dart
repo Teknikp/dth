@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../state/app_state.dart';
+
 class DisclaimerBanner extends StatelessWidget {
   const DisclaimerBanner({
     super.key,
@@ -13,13 +15,12 @@ class DisclaimerBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final text = practice
-        ? 'Unofficial study material, not legal advice. Official tests and handbooks always win.'
-        : 'Not legal advice. Rules and fees change. Confirm everything on the official pages before you apply or drive.';
+    final s = AppScope.s(context);
+    final text = practice ? s.disclaimerPractice : s.disclaimer;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(12),
+        color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -41,6 +42,7 @@ class DisclaimerBanner extends StatelessWidget {
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSecondaryContainer,
                   height: 1.35,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),

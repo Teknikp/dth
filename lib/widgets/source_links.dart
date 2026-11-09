@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../models/jurisdiction.dart';
+import '../data/presented.dart';
+import '../state/app_state.dart';
 
 class SourceLinks extends StatelessWidget {
   const SourceLinks({super.key, required this.links});
 
-  final List<OfficialLink> links;
+  final List<PresentedLink> links;
 
   @override
   Widget build(BuildContext context) {
+    final s = AppScope.s(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -17,10 +19,14 @@ class SourceLinks extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: () => openOfficialUrl(context, link.url),
             icon: const Icon(Icons.open_in_new, size: 18),
-            label: Text(link.label, textAlign: TextAlign.left),
-            style: OutlinedButton.styleFrom(
+            label: Align(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Text(
+                link.englishOnly && s.isFr
+                    ? '${link.label} (${s.english})'
+                    : link.label,
+                textAlign: TextAlign.left,
+              ),
             ),
           ),
           const SizedBox(height: 8),

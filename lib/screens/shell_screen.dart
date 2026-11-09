@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../state/app_state.dart';
 import 'about_screen.dart';
 import 'jurisdiction_list_screen.dart';
+import 'progress_screen.dart';
 import 'quiz_hub_screen.dart';
 
 class ShellScreen extends StatefulWidget {
@@ -16,35 +18,45 @@ class _ShellScreenState extends State<ShellScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final s = AppScope.s(context);
+    final locale = AppScope.of(context).locale;
     return Scaffold(
       body: IndexedStack(
         index: index,
-        children: const [
-          JurisdictionListScreen(),
-          QuizHubScreen(embedded: true),
-          AboutScreen(),
+        children: [
+          JurisdictionListScreen(key: ValueKey('licences-$locale')),
+          ProgressScreen(key: ValueKey('progress-$locale')),
+          QuizHubScreen(key: ValueKey('practice-$locale')),
+          AboutScreen(key: ValueKey('about-$locale')),
         ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: index,
         onDestinationSelected: (value) => setState(() => index = value),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            key: Key('nav-licences'),
-            icon: Icon(Icons.map_outlined),
-            selectedIcon: Icon(Icons.map),
-            label: 'Licences',
+            key: const Key('nav-licences'),
+            icon: const Icon(Icons.map_outlined),
+            selectedIcon: const Icon(Icons.map),
+            label: s.navLicences,
           ),
           NavigationDestination(
-            key: Key('nav-practice'),
-            icon: Icon(Icons.quiz_outlined),
-            selectedIcon: Icon(Icons.quiz),
-            label: 'Practice',
+            key: const Key('nav-progress'),
+            icon: const Icon(Icons.flag_outlined),
+            selectedIcon: const Icon(Icons.flag),
+            label: s.navProgress,
           ),
           NavigationDestination(
-            icon: Icon(Icons.info_outline),
-            selectedIcon: Icon(Icons.info),
-            label: 'About',
+            key: const Key('nav-practice'),
+            icon: const Icon(Icons.quiz_outlined),
+            selectedIcon: const Icon(Icons.quiz),
+            label: s.navPractice,
+          ),
+          NavigationDestination(
+            key: const Key('nav-about'),
+            icon: const Icon(Icons.info_outline),
+            selectedIcon: const Icon(Icons.info),
+            label: s.navAbout,
           ),
         ],
       ),

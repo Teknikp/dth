@@ -1,7 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:licence_prep/data/catalog.dart';
+import 'package:licence_prep/data/french/catalog_fr.dart';
+import 'package:licence_prep/data/progress_template.dart';
+import 'package:licence_prep/data/quiz_fr.dart';
 import 'package:licence_prep/data/quizzes.dart';
 import 'package:licence_prep/models/jurisdiction.dart';
+import 'package:licence_prep/models/progress.dart';
 import 'package:licence_prep/models/quiz.dart';
 
 void main() {
@@ -77,5 +81,61 @@ void main() {
   test('mixed practice returns 20 questions', () {
     final questions = questionsForQuiz(mixedQuiz, seed: 7);
     expect(questions, hasLength(20));
+  });
+
+  test('every jurisdiction has a French overlay of matching shape', () {
+    for (final item in allJurisdictions) {
+      final fr = frenchFor(item.code);
+      expect(fr, isNotNull, reason: item.code);
+      expect(fr!.stages, hasLength(item.stages.length), reason: item.code);
+      expect(fr.fees, hasLength(item.fees.length), reason: item.code);
+      expect(fr.sources, hasLength(item.sources.length), reason: item.code);
+      expect(fr.name, isNotEmpty);
+      expect(fr.parentalConsent, isNotEmpty);
+      expect(fr.knowledgeTest.summary, isNotEmpty);
+    }
+  });
+
+  test('every quiz question has French copy with the same choice count', () {
+    for (final q in allQuestions) {
+      final fr = quizFr[q.id];
+      expect(fr, isNotNull, reason: q.id);
+      expect(fr!.choices, hasLength(q.choices.length), reason: q.id);
+      expect(fr.prompt, isNotEmpty, reason: q.id);
+      expect(fr.explanation, isNotEmpty, reason: q.id);
+    }
+  });
+
+  test('progress document round-trips with a null accountId', () {
+    final now = DateTime.utc(2026, 11, 9);
+    final doc = ProgressDocument(
+      accountId: null,
+      updatedAt: now,
+      activeGoalId: 'goal_ON_1',
+      goals: [
+        LicenceGoal(
+          id: 'goal_ON_1',
+          jurisdictionCode: 'ON',
+          kind: LicenceGoal.firstPassengerLicence,
+          createdAt: now,
+          updatedAt: now,
+          checks: {'ON.knowledge': ProgressCheck(done: true, updatedAt: now)},
+        ),
+      ],
+    );
+    final copy = ProgressDocument.fromJson(doc.toJson());
+    expect(copy.accountId, isNull);
+    expect(copy.activeGoalId, 'goal_ON_1');
+    expect(copy.activeGoal!.isDone('ON.knowledge'), isTrue);
+    expect(copy.toJson()['schemaVersion'], 1);
+  });
+
+  test('progress items include knowledge, vision, road, and GDL waits', () {
+    final items = progressItemsFor(jurisdictionByCode('ON')!);
+    expect(
+      items.map((i) => i.id),
+      containsAll(['ON.knowledge', 'ON.vision', 'ON.road']),
+    );
+    expect(items.any((i) => i.id.startsWith('ON.gdl.')), isTrue);
   });
 }

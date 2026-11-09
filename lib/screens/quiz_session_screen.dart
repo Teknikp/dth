@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/quizzes.dart';
 import '../models/quiz.dart';
+import '../state/app_state.dart';
 import '../widgets/disclaimer_banner.dart';
 import 'quiz_result_screen.dart';
 
@@ -20,38 +21,43 @@ class QuizSessionScreen extends StatefulWidget {
 }
 
 class _QuizSessionScreenState extends State<QuizSessionScreen> {
-  late final QuizAttempt attempt;
-  var index = 0;
-  var revealed = false;
+  late final List<PracticeQuestion> _questions;
+  int _index = 0;
+  int? _picked;
+  int _score = 0;
+  bool _revealed = false;
+  final _answers = <int, int>{};
 
   @override
   void initState() {
     super.initState();
-    attempt = QuizAttempt(
-      quiz: widget.quiz,
-      questions: questionsForQuiz(
-        widget.quiz,
-        jurisdictionCode: widget.jurisdictionCode,
-      ),
+    _questions = questionsForQuiz(
+      widget.quiz,
+      jurisdictionCode: widget.jurisdictionCode,
     );
   }
 
-  PracticeQuestion get current => attempt.questions[index];
+  PracticeQuestion get _question => _questions[_index];
 
-  void _choose(int choice) {
-    if (revealed) return;
+  void _select(int i) {
+    if (_revealed) return;
     setState(() {
-      attempt.answers[index] = choice;
-      revealed = true;
+      _picked = i;
+      _revealed = true;
+      _answers[_index] = i;
+      if (i == _question.correctIndex) _score++;
     });
   }
 
   void _next() {
-    if (index + 1 >= attempt.questions.length) {
+    if (_index + 1 >= _questions.length) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
           builder: (_) => QuizResultScreen(
-            attempt: attempt,
+            quiz: widget.quiz,
+            questions: _questions,
+            score: _score,
+            answers: Map<int, int>.from(_answers),
             jurisdictionCode: widget.jurisdictionCode,
           ),
         ),
@@ -59,109 +65,89 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       return;
     }
     setState(() {
-      index++;
-      revealed = attempt.answers[index] != null;
+      _index++;
+      _picked = null;
+      _revealed = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (attempt.questions.isEmpty) {
+    final theme = Theme.of(context);
+    final s = AppScope.s(context);
+    final locale = AppScope.of(context).locale;
+    if (_questions.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: Text(widget.quiz.title)),
-        body: const Center(child: Text('No questions in this set.')),
+        appBar: AppBar(title: Text(widget.quiz.titleOf(locale))),
+        body: Center(child: Text(s.noQuestions)),
       );
     }
-    final theme = Theme.of(context);
-    final selected = attempt.answers[index];
+    final q = _question;
+    final choices = q.choicesOf(locale);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.quiz.title),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(6),
-          child: LinearProgressIndicator(
-            value: (index + (revealed ? 1 : 0)) / attempt.questions.length,
-          ),
-        ),
-      ),
+      appBar: AppBar(title: Text(s.questionOf(_index + 1, _questions.length))),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
-          const DisclaimerBanner(practice: true, compact: true),
+          const DisclaimerBanner(compact: true, practice: true),
           const SizedBox(height: 16),
-          Text(
-            'Question ${index + 1} of ${attempt.questions.length}',
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: theme.colorScheme.primary,
-              fontWeight: FontWeight.w700,
-            ),
+          LinearProgressIndicator(
+            value: (_index + 1) / _questions.length,
+            minHeight: 8,
+            borderRadius: BorderRadius.circular(8),
           ),
+          const SizedBox(height: 18),
+          Text(q.topicOf(locale), style: theme.textTheme.labelLarge),
           const SizedBox(height: 8),
           Text(
-            current.prompt,
+            q.promptOf(locale),
             key: const Key('quiz-prompt'),
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-              height: 1.3,
-            ),
+            style: theme.textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
-          for (var i = 0; i < current.choices.length; i++) ...[
+          for (var i = 0; i < choices.length; i++)
             _ChoiceTile(
-              index: i,
-              label: current.choices[i],
-              selected: selected == i,
-              revealed: revealed,
-              isCorrect: current.isCorrect(i),
-              onTap: () => _choose(i),
+              key: Key('choice-$i'),
+              label: choices[i],
+              selected: _picked == i,
+              revealed: _revealed,
+              correct: i == q.correctIndex,
+              onTap: () => _select(i),
             ),
-            const SizedBox(height: 8),
-          ],
-          if (revealed) ...[
-            const SizedBox(height: 8),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(12),
-              ),
+          const SizedBox(height: 12),
+          if (_revealed)
+            Card(
+              key: const Key('quiz-feedback'),
+              color: theme.colorScheme.surfaceContainerHighest,
               child: Padding(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      selected != null && current.isCorrect(selected)
-                          ? 'Correct'
-                          : 'Not quite',
-                      key: const Key('quiz-feedback'),
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+                      _picked == q.correctIndex ? s.correct : s.notQuite,
+                      style: theme.textTheme.titleMedium,
                     ),
-                    const SizedBox(height: 6),
-                    Text(current.explanation),
+                    const SizedBox(height: 8),
+                    Text(q.explanationOf(locale)),
                     const SizedBox(height: 8),
                     Text(
-                      current.sourceNote,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
+                      q.sourceNoteOf(locale),
+                      style: theme.textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
+          if (_revealed)
             FilledButton(
               key: const Key('quiz-next'),
               onPressed: _next,
               child: Text(
-                index + 1 >= attempt.questions.length
-                    ? 'See results'
-                    : 'Next question',
+                _index + 1 >= _questions.length ? s.seeResults : s.nextQuestion,
               ),
             ),
-          ],
         ],
       ),
     );
@@ -170,50 +156,50 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
 
 class _ChoiceTile extends StatelessWidget {
   const _ChoiceTile({
-    required this.index,
+    super.key,
     required this.label,
     required this.selected,
     required this.revealed,
-    required this.isCorrect,
+    required this.correct,
     required this.onTap,
   });
 
-  final int index;
   final String label;
   final bool selected;
   final bool revealed;
-  final bool isCorrect;
+  final bool correct;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     Color? color;
-    if (revealed && isCorrect) {
-      color = scheme.primaryContainer;
-    } else if (revealed && selected && !isCorrect) {
-      color = scheme.errorContainer;
+    if (revealed && correct) {
+      color = theme.colorScheme.primaryContainer;
+    } else if (revealed && selected && !correct) {
+      color = theme.colorScheme.errorContainer;
     } else if (selected) {
-      color = scheme.secondaryContainer;
+      color = theme.colorScheme.secondaryContainer;
     }
-    return Card(
-      color: color ?? Colors.white,
-      child: InkWell(
-        key: Key('choice-$index'),
-        onTap: revealed ? null : onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 14,
-                backgroundColor: scheme.surfaceContainerHighest,
-                child: Text(String.fromCharCode(65 + index)),
-              ),
-              const SizedBox(width: 12),
-              Expanded(child: Text(label)),
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: color ?? theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: selected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outlineVariant,
+            width: selected ? 2 : 1,
+          ),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Text(label, style: theme.textTheme.bodyLarge),
           ),
         ),
       ),

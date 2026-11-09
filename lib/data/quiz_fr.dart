@@ -1,0 +1,456 @@
+class FrQuestion {
+  const FrQuestion({
+    required this.prompt,
+    required this.choices,
+    required this.explanation,
+    required this.topic,
+    this.sourceNote = 'Question d’étude non officielle, basée sur des sujets courants des guides.',
+  });
+
+  final String prompt;
+  final List<String> choices;
+  final String explanation;
+  final String topic;
+  final String sourceNote;
+}
+
+const Map<String, FrQuestion> quizFr = {
+  'sign-stop': FrQuestion(
+    prompt: 'Que devez-vous faire devant un panneau octogonal rouge?',
+    choices: [
+      'Ralentir et continuer si la voie semble libre',
+      'Immobilisation complète, puis partir seulement lorsque c’est sûr',
+      'S’arrêter seulement s’il y a d’autres véhicules',
+      'Céder le passage, mais un arrêt roulant est permis la nuit',
+    ],
+    explanation: 'L’octogone rouge est le panneau d’arrêt partout au Canada. Arrêt complet avant la ligne ou le passage, regarder, puis partir à votre tour lorsque c’est sûr.',
+    topic: 'Panneaux',
+  ),
+  'sign-yield': FrQuestion(
+    prompt: 'Un triangle inversé rouge et blanc signifie généralement :',
+    choices: [
+      'Arrêt, puis départ',
+      'Zone scolaire plus loin',
+      'Céder le passage',
+      'Entrée interdite',
+    ],
+    explanation: 'Le triangle pointe vers le bas est le cédez-le-passage. Ralentissez, soyez prêt à arrêter, et cédez aux usagers qui ont priorité.',
+    topic: 'Panneaux',
+  ),
+  'sign-warning': FrQuestion(
+    prompt: 'Un losange à fond jaune indique généralement :',
+    choices: [
+      'Une prescription à respecter, comme une limite de vitesse',
+      'Un danger ou un changement de route plus loin',
+      'Une aire de loisirs',
+      'Un hôpital',
+    ],
+    explanation: 'Les losanges jaunes sont des panneaux de danger. Ils ne remplacent pas un arrêt ou une limite; ils vous demandent de vous préparer.',
+    topic: 'Panneaux',
+  ),
+  'sign-do-not-enter': FrQuestion(
+    prompt: 'Un cercle rouge avec une barre blanche horizontale signifie :',
+    choices: [
+      'Entrée interdite',
+      'Arrêt interdit',
+      'Passage à niveau',
+      'Chaussée qui rétrécit',
+    ],
+    explanation: 'C’est le panneau d’entrée interdite / sens interdit. N’empruntez pas cette voie — souvent aux bretelles de sortie et aux rues à sens unique.',
+    topic: 'Panneaux',
+  ),
+  'sign-flashing-red': FrQuestion(
+    prompt: 'Un feu rouge clignotant signifie :',
+    choices: [
+      'Comme un feu vert si l’intersection paraît vide',
+      'Ralentir à 20 km/h et continuer',
+      'Le traiter comme un arrêt : s’arrêter, puis partir lorsque c’est sûr',
+      'S’arrêter et attendre qu’il redevienne vert',
+    ],
+    explanation: 'Les guides traitent le rouge clignotant comme un arrêt. Arrêt complet, cédez, puis partez. Un rouge fixe est différent : on attend le vert (le virage à droite au rouge n’est pas toujours permis).',
+    topic: 'Panneaux',
+  ),
+  'sign-flashing-yellow': FrQuestion(
+    prompt: 'Un feu jaune clignotant signifie :',
+    choices: [
+      'S’arrêter comme à un panneau d’arrêt',
+      'Traverser l’intersection avec prudence',
+      'Le feu est hors service; demi-tour seulement',
+      'Accélérer pour dégager l’intersection',
+    ],
+    explanation: 'Le jaune clignotant : ralentir, regarder, avancer avec prudence. Cédez à quiconque est déjà dans l’intersection ou s’apprête à y entrer avec priorité.',
+    topic: 'Panneaux',
+  ),
+  'sign-school': FrQuestion(
+    prompt: 'Un pentagone jaune-vert fluorescent marque généralement :',
+    choices: [
+      'Une aire de jeux ou une zone / traversée scolaire',
+      'Un hôpital',
+      'Une zone de travaux',
+      'Un parc provincial',
+    ],
+    explanation: 'Ce pentagone est l’avertissement d’école / traversée scolaire du manuel canadien de signalisation. Réduisez la vitesse et surveillez les enfants. La limite affichée est un panneau distinct.',
+    topic: 'Panneaux',
+  ),
+  'sign-rail': FrQuestion(
+    prompt: 'À un panneau de croisement ferroviaire (X) sans barrières, vous devez :',
+    choices: [
+      'Ralentir un peu et continuer; le train klaxonnera',
+      'S’arrêter seulement si vous voyez un train',
+      'Regarder, écouter, et s’arrêter si un train approche ou si les signaux l’exigent',
+      'Rétrograder et traverser vite sans regarder',
+    ],
+    explanation: 'Traitez chaque passage comme actif. Si les feux, cloches ou un signaleur disent d’arrêter — arrêtez. Ne contournez jamais des barrières baissées. Un train ne s’arrête pas vite.',
+    topic: 'Panneaux',
+  ),
+  'sign-solid-yellow': FrQuestion(
+    prompt: 'Une ligne jaune continue de votre côté de l’axe central signifie généralement :',
+    choices: [
+      'Le dépassement est permis si vous klaxonnez d’abord',
+      'Le dépassement n’est pas permis de votre côté',
+      'La voie est réservée aux vélos',
+      'Vous devez rouler au moins 20 km/h sous la limite',
+    ],
+    explanation: 'Une jaune continue de votre côté : ne dépassez pas. Une jaune discontinue permet souvent le dépassement si la voie est libre. Vérifiez toujours le marquage local.',
+    topic: 'Panneaux',
+  ),
+  'sign-speed-regulatory': FrQuestion(
+    prompt: 'Un rectangle blanc avec un chiffre de vitesse noir est :',
+    choices: [
+      'Une vitesse suggérée par beau temps seulement',
+      'Une limite réglementaire à respecter, sauf si une vitesse plus basse est nécessaire pour la sécurité',
+      'La vitesse minimale de cette route',
+      'Un conseil pour les camions lourds seulement',
+    ],
+    explanation: 'Les limites affichées sont réglementaires. La météo, la visibilité et la circulation peuvent encore exiger d’aller plus lentement. Les défauts urbain/rural varient selon la province.',
+    topic: 'Panneaux',
+  ),
+  'rules-seatbelt': FrQuestion(
+    prompt: 'Qui doit porter la ceinture dans un véhicule de tourisme (si des ceintures sont installées)?',
+    choices: [
+      'Le conducteur seulement',
+      'Seuls les passagers de moins de 16 ans',
+      'Le conducteur et tous les passagers, selon la loi provinciale ou territoriale',
+      'Seules les personnes à l’avant',
+    ],
+    explanation: 'Chaque province et territoire canadien exige le port de la ceinture lorsqu’elle est disponible. Le conducteur est souvent responsable des jeunes passagers. Les sièges d’enfant ont des règles extra.',
+    topic: 'Règles',
+  ),
+  'rules-four-way': FrQuestion(
+    prompt: 'À un arrêt à quatre voies, la priorité habituelle est :',
+    choices: [
+      'Le plus gros véhicule part le premier',
+      'Le premier arrivé part le premier; à égalité, cédez à droite',
+      'Le nord–sud part toujours le premier',
+      'Celui qui clignote les phares a priorité',
+    ],
+    explanation: 'Les guides enseignent : premier arrêté, premier parti; à arrivée simultanée, cédez au conducteur à votre droite. Ne supposez pas que l’autre va bouger.',
+    topic: 'Règles',
+  ),
+  'rules-school-bus': FrQuestion(
+    prompt: 'Lorsqu’un autobus scolaire a les feux rouges et le bras d’arrêt sorti, vous devez :',
+    choices: [
+      'Ralentir à 30 km/h et dépasser prudemment',
+      'Vous arrêter (des deux sens sur une route non divisée) jusqu’à ce que les feux s’éteignent et que le bras rentre',
+      'Dépasser si vous êtes de l’autre côté d’une ligne peinte',
+      'Klaxonner pour montrer que vous voyez les enfants',
+    ],
+    explanation: 'Sur une route non divisée, arrêt des deux sens. Les routes divisées avec terre-plein physique sont parfois traitées autrement — connaissez la règle locale, mais ne dépassez jamais un autobus au bras sorti sur une route non divisée.',
+    topic: 'Règles',
+  ),
+  'rules-emergency': FrQuestion(
+    prompt: 'Lorsqu’un véhicule d’urgence approche gyrophare et sirène, vous devez :',
+    choices: [
+      'Vous arrêter tout de suite dans la voie',
+      'Accélérer pour dégager, puis garder la vitesse',
+      'Signaler, serrer le plus à droite possible en sécurité, et vous arrêter jusqu’à ce qu’il soit passé',
+      'Le suivre de près pour emprunter son chemin',
+    ],
+    explanation: 'Dégagez la voie. Serrez à droite et arrêtez. Ne bloquez pas les intersections. Restez arrêtés jusqu’à ce que le véhicule soit passé. Plusieurs endroits exigent aussi de ralentir et de changer de voie près d’un véhicule d’urgence ou d’une dépanneuse arrêté.',
+    topic: 'Règles',
+  ),
+  'rules-following': FrQuestion(
+    prompt: 'Une distance minimale souvent enseignée par beau temps est :',
+    choices: [
+      'Environ une longueur de véhicule, quelle que soit la vitesse',
+      'Un intervalle de deux à trois secondes (plus si les conditions sont mauvaises)',
+      'Une demi-seconde si les freins sont neufs',
+      'Aucun intervalle n’est nécessaire sous 40 km/h',
+    ],
+    explanation: 'La règle des deux ou trois secondes figure dans la plupart des guides : choisissez un repère; au moins deux à trois secondes doivent passer avant que vous l’atteigniez. Augmentez l’écart sous la pluie, la neige, la nuit, ou si on vous colle.',
+    topic: 'Règles',
+  ),
+  'rules-crosswalk': FrQuestion(
+    prompt: 'À un passage pour piétons marqué sans feux, vous devez :',
+    choices: [
+      'Ralentir seulement si un piéton a déjà commencé de votre côté',
+      'Céder aux piétons qui sont dans le passage ou s’apprêtent à y entrer, selon la loi locale',
+      'Faire signe aux piétons tout en continuant à rouler',
+      'Ne jamais s’arrêter, de peur d’une collision arrière',
+    ],
+    explanation: 'Les conducteurs doivent céder aux piétons aux passages marqués (et souvent aux intersections non marquées). Arrêtez assez loin pour que les autres voies voient le piéton. Ne dépassez pas un véhicule arrêté à un passage.',
+    topic: 'Règles',
+  ),
+  'rules-blind-spot': FrQuestion(
+    prompt: 'Avant de changer de voie, vous devez :',
+    choices: [
+      'Vérifier les rétros, signaler, et vérifier l’angle mort par-dessus l’épaule, puis bouger si c’est libre',
+      'Signaler après être entré dans la nouvelle voie',
+      'Vous fier seulement à une caméra de recul',
+      'Klaxonner et bouger tout de suite',
+    ],
+    explanation: 'Les rétros ne montrent pas l’angle mort. Les guides enseignent : rétros, clignotant, épaule, puis mouvement si l’écart est sûr. Annulez le clignotant après.',
+    topic: 'Règles',
+  ),
+  'rules-red-right': FrQuestion(
+    prompt: 'Tourner à droite à un feu rouge est :',
+    choices: [
+      'Toujours légal au Canada après un arrêt',
+      'Jamais légal au Canada',
+      'Permis à beaucoup d’endroits après un arrêt complet, sauf panneau l’interdisant — mais certaines villes et intersections le bannissent',
+      'Permis seulement pour les autobus',
+    ],
+    explanation: 'Le droit au rouge n’est pas universel. Plusieurs administrations le permettent après un arrêt complet, sauf panneau. Certaines municipalités le restreignent. Arrêtez d’abord, cédez, respectez les interdictions. Cette appli ne dira pas que c’est légal à un coin précis.',
+    topic: 'Règles',
+  ),
+  'rules-space': FrQuestion(
+    prompt: 'Si on vous colle de trop près, une réaction plus sûre est de :',
+    choices: [
+      'Freiner pour « avertir » l’autre conducteur',
+      'Augmenter votre propre distance de suivi et, si c’est sûr, changer de voie ou vous ranger pour le laisser passer',
+      'Accélérer bien au-dessus de la limite',
+      'Bloquer les deux voies pour l’empêcher de dépasser',
+    ],
+    explanation: 'Donnez-vous plus d’espace devant pour ralentir progressivement. Laissez passer le colleur lorsque c’est sûr. N’escaladez pas. Un freinage brusque peut causer une collision dont vous ferez partie.',
+    topic: 'Règles',
+  ),
+  'rules-roundabout': FrQuestion(
+    prompt: 'En entrant dans un carrefour giratoire, vous devez :',
+    choices: [
+      'Vous arrêter dans l’anneau pour forcer un intervalle',
+      'Céder aux véhicules déjà dans l’anneau, puis entrer lorsqu’il y a un écart sûr',
+      'Toujours faire un arrêt complet même si l’anneau est vide',
+      'Entrer à côté d’un autre véhicule et calquer sa vitesse',
+    ],
+    explanation: 'Cédez aux véhicules déjà en circulation (généralement à votre gauche au Canada). Signalez en sortant. Ne vous arrêtez pas dans l’anneau sauf pour éviter une collision.',
+    topic: 'Règles',
+  ),
+  'alc-criminal': FrQuestion(
+    prompt: 'Selon le Code criminel du Canada, le seuil d’alcoolémie d’une infraction pour un adulte pleinement titulaire est :',
+    choices: [
+      '0,02 % (20 mg/100 ml)',
+      '0,08 % (80 mg/100 ml)',
+      '0,15 % (150 mg/100 ml)',
+      'Il n’y a pas d’infraction fédérale — seulement des amendes provinciales',
+    ],
+    explanation: 'Conduire avec 80 mg d’alcool par 100 ml de sang (0,08) ou plus est une infraction criminelle. Les provinces et territoires imposent aussi des sanctions administratives à des niveaux plus bas (souvent 0,05). Les permis progressifs sont généralement à zéro.',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-gdl-zero': FrQuestion(
+    prompt: 'Pour la plupart des permis d’apprenti / novice / progressifs au Canada, la règle d’alcool au volant est :',
+    choices: [
+      'La même limite criminelle de 0,08 que les adultes pleinement titulaires',
+      'Zéro — tout alcool détectable peut mener à une suspension routière ou pire',
+      'Un verre standard par heure est permis',
+      'La bière est permise; les spiritueux non',
+    ],
+    explanation: 'Les programmes GDL exigent presque partout une alcoolémie zéro (et souvent zéro drogue). C’est plus strict que l’infraction criminelle à 0,08. « Zéro » veut dire rien, pas « sous 0,05 ».',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-drugs': FrQuestion(
+    prompt: 'La loi sur les facultés affaiblies couvre :',
+    choices: [
+      'L’alcool seulement',
+      'L’alcool, les drogues (y compris le cannabis et certains médicaments) et leurs combinaisons',
+      'Seulement les drogues illégales, pas le cannabis ni les ordonnances',
+      'Seulement si vous vous sentez ivre',
+    ],
+    explanation: 'Vous ne devez pas conduire avec les facultés affaiblies par l’alcool, le cannabis, d’autres drogues ou un mélange. Certains médicaments d’ordonnance ou en vente libre affaiblissent aussi. Si l’étiquette ou le médecin déconseille de conduire, ne conduisez pas.',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-fatigue': FrQuestion(
+    prompt: 'Conduire très fatigué est dangereux parce que :',
+    choices: [
+      'La fatigue est inconfortable mais n’affecte pas le temps de réaction',
+      'La fatigue peut ralentir les réactions et causer des micro-sommeils, un risque comparable à l’affaiblissement',
+      'C’est seulement un problème sur l’autoroute la nuit',
+      'Le café élimine toujours le risque',
+    ],
+    explanation: 'Les guides traitent la fatigue comme un affaiblissement grave. La bonne réponse est de s’arrêter et de se reposer, pas de « pousser ». La caféine ne remplace pas le sommeil.',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-plan': FrQuestion(
+    prompt: 'Un plan responsable si vous allez boire est :',
+    choices: [
+      'Conduire lentement sur des routes secondaires',
+      'Un conducteur qui ne boit pas, taxi, transport en commun, ou rester dormir — ne pas conduire',
+      'Manger un gros repas pour conduire après deux verres',
+      'Attendre 15 minutes après le dernier verre',
+    ],
+    explanation: 'Il n’y a pas de méthode maison fiable pour calculer l’alcoolémie. Si vous buvez, vous n’êtes pas le conducteur. Les conducteurs GDL ne doivent avoir aucun alcool dans l’organisme.',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-refuse': FrQuestion(
+    prompt: 'Refuser une demande légale d’échantillon d’haleine ou de dépistage de drogue par la police :',
+    choices: [
+      'N’a aucune conséquence si vous n’étiez pas réellement affaibli',
+      'Peut entraîner des accusations graves et des conséquences pour le permis, à elles seules',
+      'Est un droit sans aucune sanction',
+      'Est permis si vous étiez seulement à vélo',
+    ],
+    explanation: 'Le droit canadien traite le refus de se conformer à une demande légale de test comme une infraction grave, distincte du résultat d’alcoolémie. Ne prenez pas de conseil juridique auprès d’une appli d’étude.',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-open': FrQuestion(
+    prompt: 'L’alcool ouvert dans l’habitacle pendant que vous conduisez est :',
+    choices: [
+      'Correct si seuls les passagers boivent',
+      'Généralement interdit; l’alcool devrait être fermé et souvent hors de portée, selon les lois locales',
+      'Permis après 21 h',
+      'Permis seulement sur les routes rurales',
+    ],
+    explanation: 'Les provinces et territoires restreignent l’alcool ouvert dans un véhicule. Ne conduisez pas avec un verre ouvert et ne laissez pas les passagers boire dans l’auto. Vérifiez les règles exactes là où vous vivez.',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-morning': FrQuestion(
+    prompt: 'L’alcool de la veille :',
+    choices: [
+      'Est toujours parti après huit heures de sommeil',
+      'Peut encore être dans le sang le matin — vous pourriez encore dépasser une limite légale ou GDL',
+      'N’a d’effet que si vous avez mal à la tête',
+      'Ne compte pas si vous buvez de l’eau',
+    ],
+    explanation: 'Le corps a besoin de temps pour métaboliser l’alcool. Conduire le matin après une soirée chargée peut encore être illégal, surtout avec un permis GDL à tolérance zéro.',
+    topic: 'Facultés affaiblies',
+  ),
+  'win-black-ice': FrQuestion(
+    prompt: 'La glace noire est dangereuse parce que :',
+    choices: [
+      'Elle se voit facilement comme une nappe blanche',
+      'C’est une mince couche souvent presque invisible, surtout sur les ponts et viaducs',
+      'Elle ne se forme que sous −20 °C',
+      'Les pneus d’hiver la rendent sans importance',
+    ],
+    explanation: 'Les ponts et viaducs gèlent en premier. Si la direction paraît légère ou la chaussée luisante, relâchez l’accélérateur et évitez les mouvements brusques. Les pneus d’hiver aident mais ne rendent pas la glace sûre.',
+    topic: 'Hiver',
+  ),
+  'win-distance': FrQuestion(
+    prompt: 'Dans la neige ou sur la glace, vous devez :',
+    choices: [
+      'Suivre plus près pour vous servir du véhicule de tête comme coupe-vent',
+      'Augmenter nettement la distance de suivi et ralentir',
+      'Utiliser le régulateur de vitesse pour tenir une allure stable',
+      'Garder la même distance qu’en été',
+    ],
+    explanation: 'Les distances d’arrêt croissent vite sur neige et glace. Laissez un bien plus grand écart. Le régulateur est une mauvaise idée sur chaussée glissante, car le véhicule peut accélérer sans prévenir.',
+    topic: 'Hiver',
+  ),
+  'win-clear': FrQuestion(
+    prompt: 'Avant de conduire en hiver, vous devez :',
+    choices: [
+      'Dégager un petit judas dans le givre',
+      'Dégager toutes les vitres, rétros, feux et le toit de neige et de glace',
+      'Chauffer seulement l’habitacle; la neige s’envolera',
+      'Laisser la neige sur le toit pour isoler',
+    ],
+    explanation: 'Des plaques de neige qui glissent du toit peuvent vous aveugler ou aveugler le conducteur derrière. Des feux givrés cachent vos feux de freinage. Prenez le temps de tout dégager. Plusieurs endroits peuvent vous donner un constat.',
+    topic: 'Hiver',
+  ),
+  'win-skid': FrQuestion(
+    prompt: 'Si l’arrière du véhicule se met à déraper, une reprise courante est de :',
+    choices: [
+      'Frapper les freins et braquer fort dans l’autre sens',
+      'Relâcher l’accélérateur et braquer dans la direction où vous voulez que l’avant aille (dans le dérapage)',
+      'Tourner le volant à fond à gauche et le tenir',
+      'Mettre le véhicule en marche arrière',
+    ],
+    explanation: 'Regardez et braquez où vous voulez aller, relâchez la gaz, évitez le freinage de panique. L’ABS (s’il est présent) permet de freiner en dirigeant — pression ferme et stable. Pratiquez seulement dans un endroit sûr et légal.',
+    topic: 'Hiver',
+  ),
+  'win-headlights': FrQuestion(
+    prompt: 'Dans une neige, une pluie ou un brouillard denses, vous devez :',
+    choices: [
+      'Utiliser les feux de route pour percer',
+      'Utiliser les feux de croisement pour voir et être vu sans éblouir',
+      'Rouler seulement avec les feux de stationnement',
+      'Éteindre tous les feux pour réduire la réflexion',
+    ],
+    explanation: 'Les feux de croisement sont le choix habituel dans la neige et le brouillard. Les feux de route se réfléchissent dans vos yeux. Assurez-vous que les feux arrière sont allumés.',
+    topic: 'Hiver',
+  ),
+  'win-tires-qc': FrQuestion(
+    prompt: 'Au Québec, les véhicules de tourisme doivent généralement porter des pneus d’hiver :',
+    choices: [
+      'Du 1er décembre au 15 mars, sauf exception',
+      'Seulement en région rurale',
+      'Jamais — les pneus quatre saisons suffisent toujours',
+      'Seulement si vous êtes en permis progressif',
+    ],
+    explanation: 'La SAAQ exige des pneus d’hiver sur les véhicules de tourisme et les taxis du 1er décembre au 15 mars (sauf exception du règlement). D’autres provinces les recommandent; certaines ont des règles de montagne différentes. Vérifiez la page officielle pour l’année.',
+    topic: 'Hiver',
+    sourceNote: 'Item d’étude non officiel pointant vers les dates SAAQ des pneus d’hiver.',
+  ),
+  'win-kit': FrQuestion(
+    prompt:
+        'Une trousse d’urgence d’hiver est surtout utile si elle contient :',
+    choices: [
+      'Seulement un chargeur de téléphone',
+      'Des articles comme une couverture, une pelle, un grattoir, une lampe, des câbles et des vêtements chauds',
+      'Un second jeu de pneus d’été',
+      'Seulement des fusées',
+    ],
+    explanation: 'Les guides recommandent une trousse en cas de panne ou de tempête. Restez dans le véhicule si vous êtes coincé dans un blizzard, sauf si de l’aide est clairement à distance de marche sûre.',
+    topic: 'Hiver',
+  ),
+  'win-hills': FrQuestion(
+    prompt: 'Sur une côte glacée, vous devez :',
+    choices: [
+      'Prendre de l’élan et espérer que l’inertie vous porte',
+      'Utiliser un rapport bas, aller lentement, et éviter de vous arrêter à mi-pente si possible',
+      'Tenir les freins tout le long en descente, au neutre',
+      'Dépasser les plus lents sur l’accotement',
+    ],
+    explanation: 'Des mouvements lents et doux battent les trucs d’élan. Le neutre en descente réduit le contrôle. Laissez plus d’espace pour ne pas être forcé de vous arrêter dans la pente.',
+    topic: 'Hiver',
+  ),
+  'on-400': FrQuestion(
+    prompt:
+        'En Ontario, un conducteur G1 ne peut généralement pas conduire sur :',
+    choices: [
+      'Toute route dont la limite dépasse 50 km/h',
+      'Les autoroutes de la série 400 et certaines voies rapides nommées, sauf si l’accompagnateur est un instructeur certifié',
+      'Les rues résidentielles après 15 h',
+      'Les routes hors de sa municipalité',
+    ],
+    explanation: 'Les règles G1 de l’Ontario interdisent les autoroutes de la série 400 et des voies rapides listées (QEW, Gardiner, Don Valley Parkway, et autres) sauf si l’accompagnateur est un instructeur certifié. Confirmez la liste actuelle sur ontario.ca.',
+    topic: 'Règles',
+    sourceNote:
+        'Item d’étude non officiel basé sur les restrictions G1 de l’Ontario.',
+  ),
+  'bc-l-sign': FrQuestion(
+    prompt: 'En Colombie-Britannique, un apprenti de classe 7 doit :',
+    choices: [
+      'Afficher un panneau L et conduire avec un superviseur qualifié',
+      'Conduire seul après deux semaines',
+      'Utiliser seulement les voies réservées',
+      'Transporter un carnet papier au lieu d’une carte de permis',
+    ],
+    explanation: 'Le GLP d’ICBC exige un panneau L, un superviseur qualifié, alcool/drogue à zéro, et d’autres limites d’apprenti. Réussir l’examen de connaissances ne permet pas de conduire tant que le permis n’est pas délivré.',
+    topic: 'Règles',
+    sourceNote: 'Item d’étude non officiel basé sur le permis progressif ICBC.',
+  ),
+};
+
+const Map<String, (String, String)> quizMetaFr = {
+  'signs': ('Panneaux et feux', 'Arrêt, cédez, feux et marquage'),
+  'rules': ('Règles de la route', 'Priorité, partage de la route et espace'),
+  'impairment': (
+    'Alcool, drogues et fatigue',
+    'Limites criminelles, zéro GDL, et planification',
+  ),
+  'winter': ('Conduite d’hiver', 'Glace, neige, pneus et visibilité'),
+  'mixed': (
+    'Pratique mixte (20)',
+    'Une séance de 20 questions tirées de tous les sujets',
+  ),
+};

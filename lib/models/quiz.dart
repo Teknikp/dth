@@ -1,3 +1,6 @@
+import '../data/quiz_fr.dart';
+import '../l10n/app_locale.dart';
+
 class PracticeQuestion {
   const PracticeQuestion({
     required this.id,
@@ -25,6 +28,23 @@ class PracticeQuestion {
   bool get isNational => appliesTo.isEmpty;
 
   bool isCorrect(int index) => index == correctIndex;
+
+  FrQuestion? get _fr => quizFr[id];
+
+  String promptOf(AppLocale locale) =>
+      locale.isFr ? (_fr?.prompt ?? prompt) : prompt;
+
+  List<String> choicesOf(AppLocale locale) =>
+      locale.isFr ? (_fr?.choices ?? choices) : choices;
+
+  String explanationOf(AppLocale locale) =>
+      locale.isFr ? (_fr?.explanation ?? explanation) : explanation;
+
+  String topicOf(AppLocale locale) =>
+      locale.isFr ? (_fr?.topic ?? topic) : topic;
+
+  String sourceNoteOf(AppLocale locale) =>
+      locale.isFr ? (_fr?.sourceNote ?? sourceNote) : sourceNote;
 }
 
 class PracticeQuiz {
@@ -43,6 +63,12 @@ class PracticeQuiz {
 
   /// If set, a random subset of this size is used for a sitting.
   final int? sampleSize;
+
+  String titleOf(AppLocale locale) =>
+      locale.isFr ? (quizMetaFr[id]?.$1 ?? title) : title;
+
+  String subtitleOf(AppLocale locale) =>
+      locale.isFr ? (quizMetaFr[id]?.$2 ?? subtitle) : subtitle;
 }
 
 class QuizAttempt {

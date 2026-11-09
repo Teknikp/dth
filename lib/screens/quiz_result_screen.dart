@@ -1,113 +1,122 @@
 import 'package:flutter/material.dart';
 
+import '../data/progress_template.dart';
 import '../models/quiz.dart';
+import '../state/app_state.dart';
 import '../widgets/disclaimer_banner.dart';
 import 'quiz_session_screen.dart';
 
 class QuizResultScreen extends StatelessWidget {
   const QuizResultScreen({
     super.key,
-    required this.attempt,
+    required this.quiz,
+    required this.questions,
+    required this.score,
+    required this.answers,
     this.jurisdictionCode,
   });
 
-  final QuizAttempt attempt;
+  final PracticeQuiz quiz;
+  final List<PracticeQuestion> questions;
+  final int score;
+  final Map<int, int> answers;
   final String? jurisdictionCode;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final percent = attempt.percent.round();
+    final s = AppScope.s(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Results')),
+      appBar: AppBar(title: Text(s.practiceResult)),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
           const DisclaimerBanner(practice: true),
           const SizedBox(height: 20),
           Text(
-            '$percent%',
-            key: const Key('quiz-score'),
-            style: theme.textTheme.displaySmall?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          Text(
-            '${attempt.correctCount} of ${attempt.questions.length} correct',
-            style: theme.textTheme.titleMedium,
+            s.youScored(score, questions.length),
+            style: theme.textTheme.displaySmall,
           ),
           const SizedBox(height: 8),
-          Text(
-            'This score is only for unofficial practice. It is not an official knowledge-test result.',
-            style: theme.textTheme.bodySmall,
-          ),
+          Text(s.resultBody),
           const SizedBox(height: 20),
           FilledButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute<void>(
                   builder: (_) => QuizSessionScreen(
-                    quiz: attempt.quiz,
+                    quiz: quiz,
                     jurisdictionCode: jurisdictionCode,
                   ),
                 ),
               );
             },
-            child: const Text('Try this set again'),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Review',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+            child: Text(s.tryAgain),
           ),
           const SizedBox(height: 8),
-          for (var i = 0; i < attempt.questions.length; i++)
-            _ReviewTile(
-              number: i + 1,
-              question: attempt.questions[i],
-              answer: attempt.answers[i],
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(s.backToQuizzes),
+          ),
+          if (jurisdictionCode != null) ...[
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () async {
+                final state = AppScope.of(context);
+                final goal = state.progress.activeGoal;
+                if (goal != null && goal.jurisdictionCode == jurisdictionCode) {
+                  await state.toggleCheck(
+                    knowledgeItemId(jurisdictionCode!),
+                    done: true,
+                  );
+                }
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
+              },
+              child: Text(s.markKnowledgeDone),
             ),
+          ],
+          const SizedBox(height: 24),
+          for (var i = 0; i < questions.length; i++)
+            _ReviewRow(question: questions[i], picked: answers[i]),
         ],
       ),
     );
   }
 }
 
-class _ReviewTile extends StatelessWidget {
-  const _ReviewTile({
-    required this.number,
-    required this.question,
-    required this.answer,
-  });
+class _ReviewRow extends StatelessWidget {
+  const _ReviewRow({required this.question, required this.picked});
 
-  final int number;
   final PracticeQuestion question;
-  final int? answer;
+  final int? picked;
 
   @override
   Widget build(BuildContext context) {
-    final ok = answer != null && question.isCorrect(answer!);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              ok ? 'Q$number · correct' : 'Q$number · missed',
-              style: Theme.of(context).textTheme.labelLarge
-                  ?.copyWith(fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 4),
-            Text(question.prompt),
-            const SizedBox(height: 6),
-            Text(
-              'Answer: ${question.choices[question.correctIndex]}',
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ],
+    final theme = Theme.of(context);
+    final s = AppScope.s(context);
+    final locale = AppScope.of(context).locale;
+    final ok = picked == question.correctIndex;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                ok ? s.correct : s.missed,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: ok
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.error,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(question.promptOf(locale)),
+            ],
+          ),
         ),
       ),
     );
