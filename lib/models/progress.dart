@@ -142,6 +142,8 @@ class ProgressItemDef {
     required this.group,
     required this.titleEn,
     required this.titleFr,
+    this.shortEn,
+    this.shortFr,
     this.detailEn,
     this.detailFr,
   });
@@ -150,10 +152,18 @@ class ProgressItemDef {
   final String group;
   final String titleEn;
   final String titleFr;
+  final String? shortEn;
+  final String? shortFr;
   final String? detailEn;
   final String? detailFr;
 
   String title(AppLocale locale) => locale.isFr ? titleFr : titleEn;
+
+  String shortLabel(AppLocale locale) {
+    final short = locale.isFr ? shortFr : shortEn;
+    if (short != null && short.isNotEmpty) return short;
+    return title(locale);
+  }
 
   String detail(AppLocale locale) => (locale.isFr ? detailFr : detailEn) ?? '';
 

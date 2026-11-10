@@ -48,7 +48,7 @@ In Android Studio’s SDK Manager, that is **Android API 36**, matching **SDK Bu
 - **Theory** tab: handbook-style lessons (signs, rules, impairment, winter, GDL) then quizzes. Canada-wide where the idea is shared; provincial notes where rules differ (pick a study place).
 - Sign questions show an **original in-repo graphic** and ask what it means — not a text-only description of the shape.
 - English and French in-app, with a persistent EN/FR toggle. Official legal pages stay linked in the government’s language.
-- On-device progress mapping (pick a province, check off knowledge/vision/road/GDL stages). No accounts.
+- On-device progress as a **licence map**: a parchment island trail with a car that moves as you check off documents, tests, and GDL stages. Same `licence_prep.progress.v1` JSON. No accounts.
 
 ## Sign graphics (copyright)
 
