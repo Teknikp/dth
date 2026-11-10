@@ -16,32 +16,32 @@ class FrQuestion {
 
 const Map<String, FrQuestion> quizFr = {
   'sign-stop': FrQuestion(
-    prompt: 'Que devez-vous faire devant un panneau octogonal rouge?',
+    prompt: 'Que signifie ce panneau?',
     choices: [
       'Ralentir et continuer si la voie semble libre',
       'Immobilisation complète, puis partir seulement lorsque c’est sûr',
       'S’arrêter seulement s’il y a d’autres véhicules',
       'Céder le passage, mais un arrêt roulant est permis la nuit',
     ],
-    explanation: 'L’octogone rouge est le panneau d’arrêt partout au Canada. Arrêt complet avant la ligne ou le passage, regarder, puis partir à votre tour lorsque c’est sûr.',
+    explanation: 'C’est un panneau d’arrêt. Arrêt complet avant la ligne ou le passage, regarder, puis partir à votre tour lorsque c’est sûr.',
     topic: 'Panneaux',
   ),
   'sign-yield': FrQuestion(
-    prompt: 'Un triangle inversé rouge et blanc signifie généralement :',
+    prompt: 'Que signifie ce panneau?',
     choices: [
-      'Arrêt, puis départ',
+      'Arrêt, puis départ comme à un feu vert',
       'Zone scolaire plus loin',
       'Céder le passage',
       'Entrée interdite',
     ],
-    explanation: 'Le triangle pointe vers le bas est le cédez-le-passage. Ralentissez, soyez prêt à arrêter, et cédez aux usagers qui ont priorité.',
+    explanation: 'C’est un cédez-le-passage. Ralentissez, soyez prêt à arrêter, et cédez aux usagers qui ont priorité.',
     topic: 'Panneaux',
   ),
   'sign-warning': FrQuestion(
-    prompt: 'Un losange à fond jaune indique généralement :',
+    prompt: 'Que vous indique ce panneau?',
     choices: [
       'Une prescription à respecter, comme une limite de vitesse',
-      'Un danger ou un changement de route plus loin',
+      'Un danger ou un changement de route plus loin — préparez-vous',
       'Une aire de loisirs',
       'Un hôpital',
     ],
@@ -49,7 +49,7 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Panneaux',
   ),
   'sign-do-not-enter': FrQuestion(
-    prompt: 'Un cercle rouge avec une barre blanche horizontale signifie :',
+    prompt: 'Que signifie ce panneau?',
     choices: [
       'Entrée interdite',
       'Arrêt interdit',
@@ -60,7 +60,7 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Panneaux',
   ),
   'sign-flashing-red': FrQuestion(
-    prompt: 'Un feu rouge clignotant signifie :',
+    prompt: 'Que signifie ce feu?',
     choices: [
       'Comme un feu vert si l’intersection paraît vide',
       'Ralentir à 20 km/h et continuer',
@@ -71,7 +71,7 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Panneaux',
   ),
   'sign-flashing-yellow': FrQuestion(
-    prompt: 'Un feu jaune clignotant signifie :',
+    prompt: 'Que signifie ce feu?',
     choices: [
       'S’arrêter comme à un panneau d’arrêt',
       'Traverser l’intersection avec prudence',
@@ -82,9 +82,9 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Panneaux',
   ),
   'sign-school': FrQuestion(
-    prompt: 'Un pentagone jaune-vert fluorescent marque généralement :',
+    prompt: 'Que marque ce panneau?',
     choices: [
-      'Une aire de jeux ou une zone / traversée scolaire',
+      'Une zone scolaire ou une traverse — surveillez les enfants',
       'Un hôpital',
       'Une zone de travaux',
       'Un parc provincial',
@@ -93,7 +93,7 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Panneaux',
   ),
   'sign-rail': FrQuestion(
-    prompt: 'À un panneau de croisement ferroviaire (X) sans barrières, vous devez :',
+    prompt: 'Que devez-vous faire en voyant ce panneau?',
     choices: [
       'Ralentir un peu et continuer; le train klaxonnera',
       'S’arrêter seulement si vous voyez un train',
@@ -104,7 +104,7 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Panneaux',
   ),
   'sign-solid-yellow': FrQuestion(
-    prompt: 'Une ligne jaune continue de votre côté de l’axe central signifie généralement :',
+    prompt: 'Que signifie ce marquage de votre côté?',
     choices: [
       'Le dépassement est permis si vous klaxonnez d’abord',
       'Le dépassement n’est pas permis de votre côté',
@@ -115,7 +115,7 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Panneaux',
   ),
   'sign-speed-regulatory': FrQuestion(
-    prompt: 'Un rectangle blanc avec un chiffre de vitesse noir est :',
+    prompt: 'Que signifie ce panneau?',
     choices: [
       'Une vitesse suggérée par beau temps seulement',
       'Une limite réglementaire à respecter, sauf si une vitesse plus basse est nécessaire pour la sécurité',
@@ -439,16 +439,135 @@ const Map<String, FrQuestion> quizFr = {
     topic: 'Règles',
     sourceNote: 'Item d’étude non officiel basé sur le permis progressif ICBC.',
   ),
+  'sign-no-left': FrQuestion(
+    prompt: 'Que signifie ce panneau?',
+    choices: [
+      'Les virages à gauche sont recommandés',
+      'Interdiction de tourner à gauche',
+      'Tenez la gauche',
+      'Sens unique vers la gauche',
+    ],
+    explanation: 'L’anneau rouge et la barre sur une flèche gauche interdisent ce virage. Continuez seulement dans une direction permise.',
+    topic: 'Panneaux',
+  ),
+  'sign-slippery': FrQuestion(
+    prompt: 'Contre quoi ce panneau vous prévient-il?',
+    choices: [
+      'La prochaine sortie est fermée',
+      'La chaussée peut être glissante — relâchez et évitez les à-coups',
+      'Les camions doivent rétrograder',
+      'Un traversier',
+    ],
+    explanation: 'Ce danger signifie que la surface peut être glissante. Ralentissez avant le risque, pas au milieu d’un dérapage, et augmentez l’intervalle.',
+    topic: 'Panneaux',
+  ),
+  'sign-pedestrian': FrQuestion(
+    prompt: 'Que signifie ce panneau?',
+    choices: [
+      'Une limite de 20 km/h pour terrain de jeu commence ici',
+      'Des piétons peuvent traverser — cédez et soyez prêt à arrêter',
+      'Piétons interdits sur cette route',
+      'Stationnement réservé aux marcheurs',
+    ],
+    explanation: 'Ce danger marque une traverse ou une zone piétonne. Ralentissez, balayez les trottoirs, et arrêtez si quelqu’un traverse ou s’apprête à le faire.',
+    topic: 'Panneaux',
+  ),
+  'sign-roundabout': FrQuestion(
+    prompt: 'Que signifie ce panneau?',
+    choices: [
+      'Un carrefour giratoire plus loin — cédez à qui est déjà dans l’anneau',
+      'Les demi-tours sont obligatoires',
+      'La route est fermée à droite',
+      'Une boucle de stationnement',
+    ],
+    explanation: 'Ralentissez à l’approche, cédez aux véhicules déjà dans le giratoire, et prenez la voie indiquée pour votre sortie. Ne vous arrêtez pas dans l’anneau sans raison.',
+    topic: 'Panneaux',
+  ),
+  'sign-no-u-turn': FrQuestion(
+    prompt: 'Que signifie ce panneau?',
+    choices: [
+      'Les demi-tours sont encouragés',
+      'Demi-tour interdit',
+      'Giratoire plus loin',
+      'Sens unique',
+    ],
+    explanation: 'La barre sur la flèche de demi-tour interdit ce mouvement ici. Faites demi-tour seulement où c’est légal et sûr.',
+    topic: 'Panneaux',
+  ),
+  'sign-one-way': FrQuestion(
+    prompt: 'Que signifie ce panneau?',
+    choices: [
+      'La circulation sur cette voie va seulement dans le sens de la flèche',
+      'La circulation à double sens commence',
+      'Le dépassement est obligatoire',
+      'Cul-de-sac',
+    ],
+    explanation: 'Un panneau de sens unique indique la seule direction permise. N’entrez pas à contre-sens; cherchez l’entrée interdite à l’autre bout.',
+    topic: 'Panneaux',
+  ),
+  'sign-arret': FrQuestion(
+    prompt: 'Que signifie ce panneau?',
+    choices: [
+      'Ralentir pour un poste d’inspection du Québec',
+      'Immobilisation complète, puis partir seulement lorsque c’est sûr',
+      'Céder seulement aux autobus',
+      'Stationnement réservé aux taxis',
+    ],
+    explanation: 'ARRÊT est le mot français sur beaucoup de panneaux d’arrêt au Québec. L’action est la même que STOP : arrêt complet, puis départ à votre tour.',
+    topic: 'Panneaux',
+    sourceNote: 'Item d’étude non officiel basé sur le libellé des arrêts au Québec.',
+  ),
+  'gdl-zero': FrQuestion(
+    prompt: 'Pendant une étape typique du permis progressif, la norme d’alcool attendue est :',
+    choices: [
+      'La même limite criminelle qu’un permis complet',
+      'Zéro — même une petite quantité peut vous faire perdre le permis',
+      'Un verre standard si vous attendez une heure',
+      'Permis si un superviseur est dans le véhicule',
+    ],
+    explanation: 'Les apprentis et intermédiaires sont généralement tenus au zéro alcool (et règles semblables pour les drogues), plus strict que le seuil du Code criminel pour un permis complet. Confirmez votre étape dans le guide officiel.',
+    topic: 'Permis progressif',
+  ),
+  'gdl-supervisor': FrQuestion(
+    prompt: 'À l’étape d’apprenti, vous devez généralement :',
+    choices: [
+      'Conduire seulement sur un terrain privé',
+      'Être accompagné d’un conducteur pleinement titulaire qui satisfait aux règles locales',
+      'Conduire seul après le coucher du soleil pour pratiquer la nuit',
+      'Sauter l’examen de connaissances si vous avez plus de 19 ans',
+    ],
+    explanation: 'L’apprenti est supervisé. Qui est admissible (années de permis, pas un conducteur GDL, à l’avant) est fixé par chaque province ou territoire. La conduite solo vient plus tard, après un examen pratique dans la plupart des programmes.',
+    topic: 'Permis progressif',
+  ),
+  'gdl-knowledge-first': FrQuestion(
+    prompt: 'Avant de conduire sur la voie publique comme nouvel apprenti, vous devez typiquement :',
+    choices: [
+      'Réussir l’examen de connaissances (et souvent la vision) et détenir le permis d’apprenti',
+      'Réussir d’abord l’examen pratique, puis étudier les panneaux',
+      'Acheter l’assurance seulement après six mois',
+      'Terminer un diplôme universitaire de conduite',
+    ],
+    explanation: 'L’examen de connaissances vient en premier. Réussir cette appli n’est pas cet examen. Le test de vision a souvent lieu le même jour. Il faut encore le permis d’apprenti délivré avant de conduire.',
+    topic: 'Permis progressif',
+  ),
 };
 
 const Map<String, (String, String)> quizMetaFr = {
   'signs': ('Panneaux et feux', 'Arrêt, cédez, feux et marquage'),
+  'sign-identify': (
+    'Que signifie ce panneau?',
+    'Regardez le dessin, puis choisissez le sens',
+  ),
   'rules': ('Règles de la route', 'Priorité, partage de la route et espace'),
   'impairment': (
     'Alcool, drogues et fatigue',
     'Limites criminelles, zéro GDL, et planification',
   ),
   'winter': ('Conduite d’hiver', 'Glace, neige, pneus et visibilité'),
+  'gdl': (
+    'Permis progressif',
+    'Supervision, zéro alcool, et connaissances puis route',
+  ),
   'mixed': (
     'Pratique mixte (20)',
     'Une séance de 20 questions tirées de tous les sujets',

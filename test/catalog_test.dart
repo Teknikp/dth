@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:licence_prep/data/catalog.dart';
 import 'package:licence_prep/data/french/catalog_fr.dart';
 import 'package:licence_prep/data/progress_template.dart';
 import 'package:licence_prep/data/quiz_fr.dart';
 import 'package:licence_prep/data/quizzes.dart';
+import 'package:licence_prep/data/road_signs.dart';
+import 'package:licence_prep/data/theory_content.dart';
 import 'package:licence_prep/models/jurisdiction.dart';
 import 'package:licence_prep/models/progress.dart';
 import 'package:licence_prep/models/quiz.dart';
@@ -128,6 +132,46 @@ void main() {
     expect(copy.activeGoalId, 'goal_ON_1');
     expect(copy.activeGoal!.isDone('ON.knowledge'), isTrue);
     expect(copy.toJson()['schemaVersion'], 1);
+  });
+
+  test('sign drawings exist and quiz signIds resolve', () {
+    for (final sign in allRoadSigns) {
+      expect(File(sign.asset).existsSync(), isTrue, reason: sign.id);
+    }
+    for (final q in allQuestions) {
+      if (q.signId == null) continue;
+      expect(roadSignById(q.signId), isNotNull, reason: q.id);
+    }
+    for (final q in questionsForQuiz(signIdentifyQuiz)) {
+      expect(q.signId, isNotNull, reason: q.id);
+    }
+  });
+
+  test('theory topics are bilingual and point at real quizzes', () {
+    expect(allTheoryTopics.map((t) => t.id).toSet(), {
+      'signs',
+      'rules',
+      'impairment',
+      'winter',
+      'gdl',
+    });
+    final quizIds = allQuizzes.map((q) => q.id).toSet();
+    for (final topic in allTheoryTopics) {
+      expect(topic.title.fr, isNotEmpty, reason: topic.id);
+      expect(topic.lead.fr, isNotEmpty, reason: topic.id);
+      expect(topic.sections, isNotEmpty, reason: topic.id);
+      for (final section in topic.sections) {
+        expect(section.heading.fr, isNotEmpty, reason: topic.id);
+        expect(section.body.fr, isNotEmpty, reason: topic.id);
+        for (final signId in section.signIds) {
+          expect(roadSignById(signId), isNotNull, reason: '${topic.id} $signId');
+        }
+      }
+      expect(topic.quizIds, isNotEmpty, reason: topic.id);
+      for (final id in topic.quizIds) {
+        expect(quizIds, contains(id), reason: topic.id);
+      }
+    }
   });
 
   test('progress items include knowledge, vision, road, and GDL waits', () {

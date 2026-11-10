@@ -12,6 +12,7 @@ class PracticeQuestion {
     this.sourceNote =
         'Unofficial study question based on common handbook topics.',
     this.appliesTo = const [],
+    this.signId,
   });
 
   final String id;
@@ -24,6 +25,9 @@ class PracticeQuestion {
   /// Empty means the item is written as a Canada-wide study prompt.
   final List<String> appliesTo;
   final String sourceNote;
+
+  /// Original in-repo study-aid drawing shown with the prompt.
+  final String? signId;
 
   bool get isNational => appliesTo.isEmpty;
 

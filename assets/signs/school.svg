@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img">
+  <polygon points="100,10 186,74 154,186 46,186 14,74" fill="#1A1A1A"/>
+  <polygon points="100,18 178,76 148,176 52,176 22,76" fill="#D4E157"/>
+  <circle cx="78" cy="92" r="10" fill="#1A1A1A"/>
+  <rect x="70" y="104" width="16" height="28" fill="#1A1A1A"/>
+  <rect x="58" y="110" width="12" height="6" fill="#1A1A1A"/>
+  <rect x="86" y="110" width="12" height="6" fill="#1A1A1A"/>
+  <rect x="68" y="132" width="7" height="22" fill="#1A1A1A"/>
+  <rect x="81" y="132" width="7" height="22" fill="#1A1A1A"/>
+  <circle cx="122" cy="100" r="8" fill="#1A1A1A"/>
+  <rect x="116" y="110" width="12" height="22" fill="#1A1A1A"/>
+  <rect x="108" y="114" width="8" height="5" fill="#1A1A1A"/>
+  <rect x="128" y="114" width="8" height="5" fill="#1A1A1A"/>
+  <rect x="115" y="132" width="6" height="18" fill="#1A1A1A"/>
+  <rect x="124" y="132" width="6" height="18" fill="#1A1A1A"/>
+</svg>

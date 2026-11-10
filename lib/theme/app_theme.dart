@@ -89,8 +89,9 @@ class AppTheme {
         backgroundColor: Colors.white,
         indicatorColor: scheme.primaryContainer,
         height: 68,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         labelTextStyle: WidgetStatePropertyAll(
-          TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: ink),
+          TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: ink),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(

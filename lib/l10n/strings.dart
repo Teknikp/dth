@@ -17,6 +17,7 @@ class S {
   String get navLicences => isFr ? 'Permis' : 'Licences';
   String get navProgress => isFr ? 'Suivi' : 'Progress';
   String get navPractice => isFr ? 'Pratique' : 'Practice';
+  String get navTheory => isFr ? 'Théorie' : 'Theory';
   String get navAbout => isFr ? 'À propos' : 'About';
   String get disclaimer => isFr
       ? 'Ceci n’est pas un avis juridique. Les règles et les tarifs changent. Confirmez tout sur les pages officielles avant de présenter une demande ou de conduire.'
@@ -104,12 +105,12 @@ class S {
   String answerLabel(String text) => isFr ? 'Réponse : $text' : 'Answer: $text';
   String get about => isFr ? 'À propos' : 'About';
   String get aboutIntro => isFr
-      ? 'Un aide-mémoire pour savoir comment obtenir un permis de véhicule de tourisme dans une province ou un territoire canadien, et pour pratiquer les sujets d’examen de connaissances.'
-      : 'A v1 study aid for people looking up how to get a passenger-vehicle licence in a Canadian province or territory, and practising knowledge-test topics.';
+      ? 'Un aide-mémoire pour savoir comment obtenir un permis de véhicule de tourisme dans une province ou un territoire canadien, pour étudier la théorie, et pour pratiquer les sujets d’examen de connaissances.'
+      : 'A v1 study aid for people looking up how to get a passenger-vehicle licence in a Canadian province or territory, studying theory, and practising knowledge-test topics.';
   String get whatItIs => isFr ? 'Ce que fait l’appli' : 'What this app is';
   String get whatItIsBody => isFr
-      ? 'Résumés du permis progressif, des examens, des pièces, des notes médicales/vision, et des tarifs lorsqu’une page gouvernementale les publie. Questionnaires sur les panneaux, les règles, l’alcool et la conduite d’hiver. Aucun compte n’est requis. Le suivi se garde sur l’appareil.'
-      : 'Summaries of graduated licensing, tests, documents, medical/vision notes, and fees when a government or Crown insurer page published a number. Practice quizzes on signs, rules, impairment, and winter driving. No account is required. Progress stays on this device.';
+      ? 'Résumés du permis progressif, des examens, des pièces, des notes médicales/vision, et des tarifs lorsqu’une page gouvernementale les publie. Leçons de théorie puis questionnaires, avec des dessins originaux de panneaux. Aucun compte n’est requis. Le suivi se garde sur l’appareil.'
+      : 'Summaries of graduated licensing, tests, documents, medical/vision notes, and fees when a government or Crown insurer page published a number. Theory lessons then quizzes, with original sign drawings. No account is required. Progress stays on this device.';
   String get whatItIsNot =>
       isFr ? 'Ce que l’appli n’est pas' : 'What this app is not';
   String get whatItIsNotBody => isFr
@@ -179,4 +180,28 @@ class S {
   String get practiceResult => results;
   String youScored(int n, int total) => correctOf(n, total);
   String get resultBody => unofficialScore;
+  String get theoryTitle => isFr ? 'Théorie' : 'Theory';
+  String get theoryLead => isFr
+      ? 'Étudiez un sujet comme dans un guide, puis passez un questionnaire. Contenu pancanadien, plus des notes là où les règles changent.'
+      : 'Study a topic the way a handbook is organised, then take a quiz. Canada-wide content, plus notes where the rules change.';
+  String get theoryBody => isFr
+      ? 'Choisissez un lieu d’étude pour voir les notes provinciales (pneus d’hiver au Québec, autoroutes G1 en Ontario). Les leçons sont des aides d’étude originales, pas le texte d’un manuel.'
+      : 'Pick a study place to see provincial notes (Québec winter tires, Ontario G1 freeways). Lessons are original study aids, not handbook text.';
+  String get studyPlace => isFr ? 'Étudier pour' : 'Study for';
+  String get canadaWide => isFr ? 'Pancanadien' : 'Canada-wide';
+  String get startTopicQuiz =>
+      isFr ? 'Questionnaire sur ce sujet' : 'Practice this topic';
+  String get moreQuizzes =>
+      isFr ? 'Autres questionnaires' : 'More quizzes';
+  String get openLesson => isFr ? 'Ouvrir la leçon' : 'Open lesson';
+  String get gdlStagesHere => isFr
+      ? 'Étapes chez vous (résumé non officiel)'
+      : 'Stages where you are (unofficial summary)';
+  String get pickPlaceForGdl => isFr
+      ? 'Choisissez une province ou un territoire plus haut pour voir ses étapes de permis progressif.'
+      : 'Pick a province or territory above to see its graduated-licence stages.';
+  String get theorySignCaption => isFr
+      ? 'Dessin d’étude original, pas une plaque officielle.'
+      : 'Original study-aid drawing, not an official plate.';
+  String get fromTheory => isFr ? 'Depuis la théorie' : 'From theory';
 }

@@ -1,6 +1,6 @@
 # Licence Prep
 
-A Flutter app for looking up **passenger-vehicle licence requirements** in all 13 Canadian provinces and territories, and practising knowledge-test topics (signs, rules, alcohol/drugs, winter driving).
+A Flutter app for looking up **passenger-vehicle licence requirements** in all 13 Canadian provinces and territories, studying knowledge-test **theory**, and practising quizzes (signs, rules, alcohol/drugs, winter driving, GDL).
 
 This is unofficial study material, **not legal advice**. Official handbooks, tests, and fee pages always win. Where a number was not published on an official page, the app says so and links that page instead of inventing a figure.
 
@@ -45,8 +45,22 @@ In Android Studio’s SDK Manager, that is **Android API 36**, matching **SDK Bu
 - Pick a province or territory, then read GDL stages, knowledge vs road tests, documents, medical/vision notes, and fees **only when published**.
 - Official source buttons and handbook links on each jurisdiction page.
 - Practice quizzes with immediate explanations, clearly labelled unofficial.
+- **Theory** tab: handbook-style lessons (signs, rules, impairment, winter, GDL) then quizzes. Canada-wide where the idea is shared; provincial notes where rules differ (pick a study place).
+- Sign questions show an **original in-repo graphic** and ask what it means — not a text-only description of the shape.
 - English and French in-app, with a persistent EN/FR toggle. Official legal pages stay linked in the government’s language.
 - On-device progress mapping (pick a province, check off knowledge/vision/road/GDL stages). No accounts.
+
+## Sign graphics (copyright)
+
+Drawings in `assets/signs/` are **original study-aid vectors** made for this app. They recreate the public, on-street *look* of common Canadian regulatory and warning signs (octagon, yield triangle, MAXIMUM plate, school pentagon, and similar) with simple geometry and original lettering (STOP, ARRÊT, YIELD, CÉDEZ, MAXIMUM).
+
+They are **not**:
+
+- TAC (Transportation Association of Canada) plates or MUTCDC artwork
+- scans or copies from a provincial MOT handbook
+- assets from a commercial test-bank app
+
+Use them only as unofficial study diagrams. Official meaning still comes from the handbook for the province or territory where you will take the test.
 
 ## Gaps
 
