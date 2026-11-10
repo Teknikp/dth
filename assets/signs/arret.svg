@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img">
+  <polygon points="62,12 138,12 188,62 188,138 138,188 62,188 12,138 12,62" fill="#FFFFFF"/>
+  <polygon points="64,20 136,20 180,64 180,136 136,180 64,180 20,136 20,64" fill="#C41E3A"/>
+  <text x="100" y="118" text-anchor="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" letter-spacing="1">ARRÊT</text>
+</svg>

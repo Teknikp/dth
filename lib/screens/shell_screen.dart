@@ -5,6 +5,7 @@ import 'about_screen.dart';
 import 'jurisdiction_list_screen.dart';
 import 'progress_screen.dart';
 import 'quiz_hub_screen.dart';
+import 'theory_hub_screen.dart';
 
 class ShellScreen extends StatefulWidget {
   const ShellScreen({super.key});
@@ -26,6 +27,7 @@ class _ShellScreenState extends State<ShellScreen> {
         children: [
           JurisdictionListScreen(key: ValueKey('licences-$locale')),
           ProgressScreen(key: ValueKey('progress-$locale')),
+          TheoryHubScreen(key: ValueKey('theory-$locale')),
           QuizHubScreen(key: ValueKey('practice-$locale')),
           AboutScreen(key: ValueKey('about-$locale')),
         ],
@@ -45,6 +47,12 @@ class _ShellScreenState extends State<ShellScreen> {
             icon: const Icon(Icons.flag_outlined),
             selectedIcon: const Icon(Icons.flag),
             label: s.navProgress,
+          ),
+          NavigationDestination(
+            key: const Key('nav-theory'),
+            icon: const Icon(Icons.menu_book_outlined),
+            selectedIcon: const Icon(Icons.menu_book),
+            label: s.navTheory,
           ),
           NavigationDestination(
             key: const Key('nav-practice'),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../data/quizzes.dart';
+import '../data/road_signs.dart';
 import '../models/quiz.dart';
 import '../state/app_state.dart';
 import '../widgets/disclaimer_banner.dart';
+import '../widgets/sign_graphic.dart';
 import 'quiz_result_screen.dart';
 
 class QuizSessionScreen extends StatefulWidget {
@@ -87,6 +89,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(s.questionOf(_index + 1, _questions.length))),
       body: ListView(
+        key: const Key('quiz-session-list'),
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
           const DisclaimerBanner(compact: true, practice: true),
@@ -99,6 +102,22 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           const SizedBox(height: 18),
           Text(q.topicOf(locale), style: theme.textTheme.labelLarge),
           const SizedBox(height: 8),
+          if (roadSignById(q.signId) != null) ...[
+            Center(
+              child: SignGraphic(
+                key: const Key('quiz-sign'),
+                sign: roadSignById(q.signId)!,
+                size: 188,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              s.theorySignCaption,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall,
+            ),
+            const SizedBox(height: 14),
+          ],
           Text(
             q.promptOf(locale),
             key: const Key('quiz-prompt'),

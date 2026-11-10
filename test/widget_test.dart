@@ -13,6 +13,15 @@ Future<LicencePrepApp> pumpApp(WidgetTester tester) async {
   return app;
 }
 
+Finder verticalScroll(Key key) {
+  return find.descendant(
+    of: find.byKey(key),
+    matching: find.byWidgetPredicate(
+      (widget) => widget is Scrollable && widget.axisDirection == AxisDirection.down,
+    ),
+  );
+}
+
 void main() {
   testWidgets('province pick shows requirements then a practice quiz', (
     tester,
@@ -48,13 +57,18 @@ void main() {
     expect(find.textContaining('Unofficial study material'), findsWidgets);
     expect(find.byKey(const Key('quiz-prompt')), findsOneWidget);
 
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('choice-0')),
+      300,
+      scrollable: verticalScroll(const Key('quiz-session-list')),
+    );
     await tester.tap(find.byKey(const Key('choice-0')));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('quiz-feedback')), findsOneWidget);
     await tester.scrollUntilVisible(
       find.byKey(const Key('quiz-next')),
       300,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: verticalScroll(const Key('quiz-session-list')),
     );
     expect(find.byKey(const Key('quiz-next')), findsOneWidget);
   });
@@ -94,6 +108,101 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Votre parcours'), findsOneWidget);
     expect(find.text('Your progress'), findsNothing);
+  });
+
+  testWidgets('theory lesson then a sign quiz shows a graphic', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await pumpApp(tester);
+
+    await tester.tap(find.byKey(const Key('nav-theory')));
+    await tester.pumpAndSettle();
+    expect(find.text('Theory'), findsWidgets);
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('theory-signs')),
+      300,
+      scrollable: verticalScroll(const Key('theory-list')),
+    );
+    expect(find.byKey(const Key('theory-signs')), findsOneWidget);
+    await tester.ensureVisible(
+      find.descendant(
+        of: find.byKey(const Key('theory-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('theory-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('How signs are grouped'), findsOneWidget);
+
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('theory-quiz-signs')),
+      400,
+      scrollable: verticalScroll(const Key('theory-topic-list')),
+    );
+    await tester.tap(find.byKey(const Key('theory-quiz-signs')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('quiz-sign')), findsOneWidget);
+    expect(find.byKey(const Key('quiz-prompt')), findsOneWidget);
+    expect(find.text('What does this sign mean?'), findsOneWidget);
+  });
+
+  testWidgets('French theory tab and sign prompt', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    SharedPreferences.setMockInitialValues({});
+    final state = await AppState.load();
+    await tester.pumpWidget(LicencePrepApp(state: state));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('lang-fr')).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('nav-theory')));
+    await tester.pumpAndSettle();
+    expect(find.text('Théorie'), findsWidgets);
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('theory-signs')),
+      300,
+      scrollable: verticalScroll(const Key('theory-list')),
+    );
+
+    await tester.ensureVisible(
+      find.descendant(
+        of: find.byKey(const Key('theory-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('theory-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Comment les panneaux sont groupés'), findsOneWidget);
+
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('theory-quiz-sign-identify')),
+      400,
+      scrollable: verticalScroll(const Key('theory-topic-list')),
+    );
+    await tester.tap(find.byKey(const Key('theory-quiz-sign-identify')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('quiz-sign')), findsOneWidget);
+    expect(find.text('Que signifie ce panneau?'), findsOneWidget);
   });
 
   testWidgets('progress tab tracks a province on device', (tester) async {
