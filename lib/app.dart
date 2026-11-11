@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'screens/shell_screen.dart';
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
+import 'widgets/branded_splash.dart';
 
 class LicencePrepApp extends StatelessWidget {
   const LicencePrepApp({super.key, this.state});
@@ -17,13 +18,7 @@ class LicencePrepApp extends StatelessWidget {
       future: AppState.load(),
       builder: (context, snap) {
         if (!snap.hasData) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.light(),
-            home: const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
-          );
+          return const BrandedSplash();
         }
         return _BoundApp(state: snap.data!);
       },

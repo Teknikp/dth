@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../models/quiz.dart';
+import 'quizzes_extra.dart';
 
 const List<PracticeQuestion> allQuestions = [
   PracticeQuestion(
@@ -643,7 +644,8 @@ const List<PracticeQuestion> allQuestions = [
   ),
   PracticeQuestion(
     id: 'gdl-knowledge-first',
-    prompt: 'Before you drive on public roads as a new learner you typically must:',
+    prompt:
+        'Before you drive on public roads as a new learner you typically must:',
     choices: [
       'Pass the knowledge test (and often a vision check) and hold the learner licence',
       'Pass the road test first, then study the signs',
@@ -654,6 +656,223 @@ const List<PracticeQuestion> allQuestions = [
     explanation: 'The knowledge test comes first in graduated systems. Passing this app is not that test. Vision screening is often the same day. You still need the issued learner licence before you drive.',
     topic: 'GDL',
   ),
+  PracticeQuestion(
+    id: 'sign-cedez',
+    prompt: 'What does this sign mean?',
+    choices: [
+      'Stop, then proceed as if the light were green',
+      'Yield the right-of-way',
+      'Parking for taxis only',
+      'Do not enter',
+    ],
+    correctIndex: 1,
+    explanation: 'CÉDEZ is the French wording on many Québec yield signs. Slow down, be ready to stop, and give way to traffic and pedestrians that have the right-of-way.',
+    topic: 'Signs',
+    appliesTo: ['QC'],
+    signId: 'cedez',
+    sourceNote: 'Unofficial study item based on Québec yield-sign wording.',
+  ),
+  PracticeQuestion(
+    id: 'sign-curve-slow',
+    prompt: 'When you see this warning, you should:',
+    choices: [
+      'Maintain highway speed; the sign is only advisory',
+      'Slow before the curve and stay in your lane',
+      'Stop in the travel lane and wait',
+      'Pass on the shoulder',
+    ],
+    correctIndex: 1,
+    explanation: 'A yellow diamond warning of a curve is not a stop and not a new speed limit. Reduce speed before you enter the bend and keep to your lane.',
+    topic: 'Signs',
+    signId: 'warning_curve',
+  ),
+  PracticeQuestion(
+    id: 'sign-rail-gates',
+    prompt: 'At a railway crossing with gates or lights, you must:',
+    choices: [
+      'Go around lowered gates if no train is visible',
+      'Stop only if a freight train is coming, not a passenger train',
+      'Never cross while lights are flashing or gates are down; look and listen even if they are up',
+      'Speed up so you clear the tracks faster',
+    ],
+    correctIndex: 2,
+    explanation: 'Never drive around lowered gates. If lights flash, stop. Even with the gates up, look and listen — a second train can follow. Confirm local rules in your handbook.',
+    topic: 'Signs',
+    signId: 'railway',
+  ),
+  PracticeQuestion(
+    id: 'rules-pass-solid',
+    prompt:
+        'A solid yellow line on your side of the centre line generally means:',
+    choices: [
+      'You may pass if the vehicle ahead is slow',
+      'Do not pass; stay in your lane',
+      'The lane is reserved for buses',
+      'Parking is allowed on the left',
+    ],
+    correctIndex: 1,
+    explanation: 'A solid yellow line on your side means do not pass. Broken yellow usually allows passing if the way is clear. Always read the marking together with signs and oncoming traffic.',
+    topic: 'Rules',
+    signId: 'pavement_yellow',
+  ),
+  PracticeQuestion(
+    id: 'rules-lane-change',
+    prompt: 'Before you change lanes you should:',
+    choices: [
+      'Signal, check mirrors and the blind spot, then move if it is clear',
+      'Move first, then signal so others know you meant it',
+      'Honk and pull over without looking',
+      'Rely only on a backup camera',
+    ],
+    correctIndex: 0,
+    explanation: 'Signal early, check mirrors, then glance over your shoulder for the blind spot. Move only if the gap is safe. Mirrors alone miss vehicles beside you.',
+    topic: 'Rules',
+  ),
+  PracticeQuestion(
+    id: 'rules-headlights-day',
+    prompt: 'When should you use headlights (or daytime running lights) in a passenger vehicle?',
+    choices: [
+      'Only after civil twilight',
+      'Whenever visibility is poor, and in many places whenever the vehicle is moving',
+      'Never in rain because they drain the battery',
+      'Only on highways',
+    ],
+    correctIndex: 1,
+    explanation: 'Use lights so others can see you in rain, snow, fog, and dusk. Many Canadian vehicles use daytime running lights; still turn on full headlights when it is dark or hard to see. Confirm local rules.',
+    topic: 'Rules',
+  ),
+  PracticeQuestion(
+    id: 'rules-park-hill',
+    prompt:
+        'When you park facing uphill at a curb, a common handbook method is:',
+    choices: [
+      'Leave the wheels straight and the car in neutral',
+      'Turn the wheels so that if the vehicle rolls, it rolls away from traffic (usually toward the curb)',
+      'Turn the wheels toward the travel lane so you can leave faster',
+      'Set only the parking brake and ignore the wheels',
+    ],
+    correctIndex: 1,
+    explanation: 'Uphill with a curb, turn wheels away from the curb so a roll rests on the curb. Downhill, turn toward the curb. Always set the parking brake. Details vary — check your handbook.',
+    topic: 'Rules',
+  ),
+  PracticeQuestion(
+    id: 'rules-horn',
+    prompt: 'The horn is meant to:',
+    choices: [
+      'Warn others of danger, not to scold or hurry them',
+      'Be used at every green light',
+      'Replace a signal when changing lanes',
+      'Be sounded in a hospital zone to clear the road',
+    ],
+    correctIndex: 0,
+    explanation: 'Use the horn to warn, not to express anger. Unnecessary noise is an offence in many places. A signal still belongs on every lane change and turn.',
+    topic: 'Rules',
+  ),
+  PracticeQuestion(
+    id: 'gdl-display-sign',
+    prompt: 'Where a learner or novice must display an L or N sign, that sign:',
+    choices: [
+      'Is optional if you passed this app’s quiz',
+      'Must be shown as the licensing authority requires, usually on the vehicle',
+      'Can be a phone wallpaper instead',
+      'Is only for motorcycles',
+    ],
+    correctIndex: 1,
+    explanation: 'British Columbia and some other programs require a visible L or N. Rules differ by province. Passing a study quiz does not replace the official display requirement.',
+    topic: 'GDL',
+  ),
+  PracticeQuestion(
+    id: 'gdl-time-varies',
+    prompt: 'Minimum time in a learner or novice stage:',
+    choices: [
+      'Is 12 months everywhere in Canada',
+      'Is set by each province or territory and can be shorter with approved training — read that place’s official page',
+      'Can be skipped if you are over 25 anywhere',
+      'Is unpublished in every jurisdiction',
+    ],
+    correctIndex: 1,
+    explanation: 'Ontario, Québec, B.C., and others publish different waits (and some training discounts). Nunavut does not publish a multi-year GDL timetable like most provinces. Do not memorize one national number.',
+    topic: 'GDL',
+  ),
+  PracticeQuestion(
+    id: 'gdl-night',
+    prompt: 'Night-time driving in a typical learner stage:',
+    choices: [
+      'Is unrestricted once you hold the card',
+      'Is often limited to certain hours unless a qualified supervisor is with you — confirm the local GDL page',
+      'Is banned until you have a full licence',
+      'Is allowed only on private property',
+    ],
+    correctIndex: 1,
+    explanation: 'Many learner licences ban late-night driving (for example Ontario G1 midnight–5:00 a.m.). Hours and exceptions are provincial. Read the official stage list, not a rumour.',
+    topic: 'GDL',
+  ),
+  PracticeQuestion(
+    id: 'gdl-passengers',
+    prompt: 'Passenger limits in graduated licensing:',
+    choices: [
+      'Never apply if seatbelts are used',
+      'Often cap how many people you may carry, especially at night or under a given age — check the official stage',
+      'Apply only to commercial classes',
+      'Are the same in every province',
+    ],
+    correctIndex: 1,
+    explanation: 'Novice and some learner stages limit passengers (B.C. N, Ontario G2 drivers 19 and under at night, and others). Family exceptions exist in some programs. Confirm the page for your licence.',
+    topic: 'GDL',
+  ),
+  PracticeQuestion(
+    id: 'alc-cannabis',
+    prompt: 'Cannabis and driving in Canada:',
+    choices: [
+      'Is legal for any licensed driver if you wait ten minutes',
+      'Can impair, is a criminal and licence issue, and GDL drivers are typically held to zero',
+      'Is only a problem if you also drank alcohol',
+      'Does not affect reaction time',
+    ],
+    correctIndex: 1,
+    explanation: 'Drug-impaired driving is a Criminal Code offence. Graduated-licence stages generally require zero blood drug concentration as well as zero alcohol. Wait until you are unimpaired — “I felt fine” is not a defence.',
+    topic: 'Impairment',
+  ),
+  PracticeQuestion(
+    id: 'alc-prescription',
+    prompt: 'Prescription or over-the-counter medicine that causes drowsiness:',
+    choices: [
+      'Is always safe because a doctor prescribed it',
+      'Can still impair driving; read labels and do not drive if you are not alert',
+      'Only matters for commercial licences',
+      'Is allowed if you stay in the right lane',
+    ],
+    correctIndex: 1,
+    explanation: 'Legal drugs can still impair. If the label warns against operating machinery, do not drive. Handbooks treat this as impairment, not a loophole.',
+    topic: 'Impairment',
+  ),
+  PracticeQuestion(
+    id: 'win-visibility',
+    prompt: 'If blowing snow or fog cuts what you can see, you should:',
+    choices: [
+      'Keep highway speed so you do not surprise people behind',
+      'Slow down, use headlights, and leave a gap you could stop in',
+      'Use only parking lights',
+      'Follow the vehicle ahead as closely as possible',
+    ],
+    correctIndex: 1,
+    explanation: 'Drive so you can stop within the distance you can see. Headlights (not high beams in fog) help others see you. Tailgating in a white-out is how pile-ups start.',
+    topic: 'Winter',
+  ),
+  PracticeQuestion(
+    id: 'win-stuck',
+    prompt: 'If you are stuck in a blizzard away from help, a common handbook recommendation is:',
+    choices: [
+      'Leave the vehicle and walk toward the last town',
+      'Stay with the vehicle, keep a window slightly open for air, and run the engine only as needed for heat',
+      'Sleep in a snowbank beside the car',
+      'Drink alcohol to stay warm',
+    ],
+    correctIndex: 1,
+    explanation: 'The vehicle is shelter and easier to find. Clear the exhaust of snow so carbon monoxide cannot enter. Walk only if help is clearly close. This is study advice, not a survival course.',
+    topic: 'Winter',
+  ),
+  ...extraQuestions,
 ];
 
 const signsQuiz = PracticeQuiz(
@@ -671,6 +890,21 @@ const signsQuiz = PracticeQuiz(
     'sign-rail',
     'sign-solid-yellow',
     'sign-speed-regulatory',
+    'sign-no-left',
+    'sign-slippery',
+    'sign-pedestrian',
+    'sign-roundabout',
+    'sign-one-way',
+    'sign-curve-slow',
+    'sign-rail-gates',
+    'sign-no-right',
+    'sign-no-parking',
+    'sign-no-stopping',
+    'sign-keep-right',
+    'sign-merge',
+    'sign-winding',
+    'sign-hospital',
+    'sign-maximum-80',
   ],
 );
 
@@ -691,6 +925,20 @@ const signIdentifyQuiz = PracticeQuiz(
     'sign-one-way',
     'sign-school',
     'sign-arret',
+    'sign-warning',
+    'sign-flashing-red',
+    'sign-rail',
+    'sign-cedez',
+    'sign-curve-slow',
+    'sign-no-right',
+    'sign-no-parking',
+    'sign-two-way',
+    'sign-wildlife',
+    'sign-stop-ahead',
+    'sign-signal-ahead',
+    'sign-no-passing',
+    'sign-playground',
+    'sign-no-stopping',
   ],
 );
 
@@ -705,6 +953,10 @@ const gdlQuiz = PracticeQuiz(
     'alc-gdl-zero',
     'on-400',
     'bc-l-sign',
+    'gdl-display-sign',
+    'gdl-time-varies',
+    'gdl-night',
+    'gdl-passengers',
   ],
 );
 
@@ -725,6 +977,11 @@ const rulesQuiz = PracticeQuiz(
     'rules-roundabout',
     'on-400',
     'bc-l-sign',
+    'rules-pass-solid',
+    'rules-lane-change',
+    'rules-headlights-day',
+    'rules-park-hill',
+    'rules-horn',
   ],
 );
 
@@ -741,6 +998,8 @@ const impairmentQuiz = PracticeQuiz(
     'alc-refuse',
     'alc-open',
     'alc-morning',
+    'alc-cannabis',
+    'alc-prescription',
   ],
 );
 
@@ -757,21 +1016,71 @@ const winterQuiz = PracticeQuiz(
     'win-tires-qc',
     'win-kit',
     'win-hills',
+    'win-visibility',
+    'win-stuck',
   ],
 );
 
 const mixedQuiz = PracticeQuiz(
   id: 'mixed',
-  title: 'Mixed practice (20)',
-  subtitle: 'A 20-question sitting drawn from every topic',
+  title: 'Mixed practice (30)',
+  subtitle: 'A 30-question sitting drawn from every topic',
+  questionIds: [],
+  sampleSize: 30,
+);
+
+const pointsQuiz = PracticeQuiz(
+  id: 'points',
+  title: 'Demerit and penalty points',
+  subtitle: 'Provincial and territorial systems, from official pages',
+  questionIds: [
+    'pts-not-national',
+    'pts-gdl-lower',
+    'pts-on-zero',
+    'pts-on-15',
+    'pts-on-novice',
+    'pts-on-handheld',
+    'pts-qc-learner',
+    'pts-qc-25',
+    'pts-bc-dpp',
+    'pts-ab-15',
+    'pts-ab-gdl',
+    'pts-sk-letter',
+    'pts-mb-dsr',
+    'pts-ns-learner',
+    'pts-nl-12',
+    'pts-yt-gdl',
+    'pts-nt-24',
+    'pts-nb-warn',
+    'pts-pe-12',
+    'pts-nu-regs',
+  ],
+);
+
+const mockQuiz = PracticeQuiz(
+  id: 'mock',
+  title: 'Mock exam (unofficial)',
+  subtitle:
+      'Full 40-question sitting, score percent, 80% study threshold — not an official pass mark',
+  questionIds: [],
+  sampleSize: 40,
+  unofficialPassPercent: 80,
+);
+
+const weakQuiz = PracticeQuiz(
+  id: 'weak',
+  title: 'Saved and weak topics',
+  subtitle: 'A sitting drawn from topics you bookmarked or missed',
   questionIds: [],
   sampleSize: 20,
 );
 
 const List<PracticeQuiz> allQuizzes = [
+  mockQuiz,
   signsQuiz,
   signIdentifyQuiz,
   rulesQuiz,
+  pointsQuiz,
   impairmentQuiz,
   winterQuiz,
   gdlQuiz,
@@ -789,9 +1098,10 @@ List<PracticeQuestion> questionsForQuiz(
   PracticeQuiz quiz, {
   String? jurisdictionCode,
   int? seed,
+  Set<String>? topicIds,
 }) {
   final pool = <PracticeQuestion>[];
-  if (quiz.id == mixedQuiz.id) {
+  if (quiz.questionIds.isEmpty) {
     pool.addAll(allQuestions);
   } else {
     for (final id in quiz.questionIds) {
@@ -801,6 +1111,11 @@ List<PracticeQuestion> questionsForQuiz(
   }
 
   final filtered = pool.where((q) {
+    if (topicIds != null &&
+        topicIds.isNotEmpty &&
+        !topicIds.contains(q.topicId)) {
+      return false;
+    }
     if (q.appliesTo.isEmpty) return true;
     if (jurisdictionCode == null) return true;
     return q.appliesTo.contains(jurisdictionCode);

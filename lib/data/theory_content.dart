@@ -1,4 +1,5 @@
 import '../models/theory.dart';
+import 'theory_points.dart';
 
 const signsTopic = TheoryTopic(
   id: 'signs',
@@ -13,7 +14,10 @@ const signsTopic = TheoryTopic(
   ),
   sections: [
     TheorySection(
-      heading: Copy('How signs are grouped', 'Comment les panneaux sont groupés'),
+      heading: Copy(
+        'How signs are grouped',
+        'Comment les panneaux sont groupés',
+      ),
       body: Copy(
         'Handbooks group traffic control into a few families. Regulatory signs tell you a rule you must follow (stop, speed, turn bans). Warning signs tell you to prepare for a hazard or a change in the road. Signals and pavement markings work with signs; they can also stand alone. Information signs (hospital, parking, route markers) guide you but are not the main knowledge-test focus.',
         'Les guides regroupent la signalisation en quelques familles. Les panneaux de prescription donnent une règle à suivre (arrêt, vitesse, interdiction de tourner). Les panneaux de danger vous demandent de vous préparer à un risque ou à un changement. Les feux et le marquage travaillent avec les panneaux; ils peuvent aussi suffire seuls. Les panneaux d’indication (hôpital, stationnement, itinéraire) orientent, mais ce n’est pas le cœur de l’examen.',
@@ -26,7 +30,13 @@ const signsTopic = TheoryTopic(
         'A red octagon means stop: full stop before the line or crosswalk, then go only when it is your turn and safe. An inverted red-and-white triangle means yield: slow, be ready to stop, and give way. A red circle with a white bar means do not enter. A white rectangle with MAXIMUM and a number is a posted speed limit. A red ring around a black arrow with a slash forbids that movement (no left turn, no U-turn).',
         'Un octogone rouge signifie arrêt : immobilisation complète avant la ligne ou le passage, puis départ seulement à votre tour et en sécurité. Un triangle inversé rouge et blanc signifie cédez : ralentir, être prêt à s’arrêter, et laisser passer. Un cercle rouge avec une barre blanche signifie entrée interdite. Un rectangle blanc avec MAXIMUM et un chiffre est une limite affichée. Un anneau rouge autour d’une flèche barrée interdit ce mouvement (pas à gauche, pas de demi-tour).',
       ),
-      signIds: ['stop', 'yield', 'do_not_enter', 'maximum_50', 'no_left_turn'],
+      signIds: [
+        'stop',
+        'yield',
+        'do_not_enter',
+        'maximum_50',
+        'no_left_turn',
+      ],
     ),
     TheorySection(
       heading: Copy('Warnings, school, and rail', 'Dangers, école et rail'),
@@ -34,7 +44,13 @@ const signsTopic = TheoryTopic(
         'Yellow diamonds warn of curves, merges, ice, pedestrians, and similar hazards. A fluorescent yellow-green pentagon marks a school area or school crossing — watch for children; a separate sign may post a school-zone speed. An X-shaped crossbuck marks a railway crossing: look, listen, and never go around lowered gates. These signs do not replace a stop or a speed limit; they tell you to prepare.',
         'Les losanges jaunes préviennent des courbes, des concourances, de la glace, des piétons et d’autres risques. Un pentagone jaune-vert fluorescent marque une zone ou une traverse scolaire — surveillez les enfants; une limite scolaire peut être affichée à part. Un X marque un passage à niveau : regarder, écouter, et ne jamais contourner une barrière baissée. Ces panneaux ne remplacent pas un arrêt ou une limite; ils demandent de se préparer.',
       ),
-      signIds: ['school', 'railway', 'slippery', 'pedestrian', 'roundabout'],
+      signIds: [
+        'school',
+        'railway',
+        'slippery',
+        'pedestrian',
+        'roundabout',
+      ],
     ),
     TheorySection(
       heading: Copy('Lights and pavement', 'Feux et marquage'),
@@ -43,6 +59,45 @@ const signsTopic = TheoryTopic(
         'Un feu rouge clignotant se traite comme un arrêt. Un jaune clignotant permet de continuer avec prudence; vous cédez toujours à qui a priorité. Une ligne jaune continue de votre côté interdit généralement le dépassement. Une ligne discontinue le permet si la voie est libre. Lisez toujours le marquage avec les panneaux et la circulation.',
       ),
       signIds: ['signal_flash_red', 'signal_flash_yellow', 'pavement_yellow'],
+    ),
+    TheorySection(
+      heading: Copy(
+        'Parking, turns, and information',
+        'Stationnement, virages et indication',
+      ),
+      body: Copy(
+        'A red ring around a black arrow with a slash forbids that turn (no right turn, no U-turn). A blue disc with a red ring and a P or an X is the study-aid no-parking or no-stopping sign — read arrows and time plates on the real sign. MAXIMUM with a larger number is still a posted limit. A blue square with H is hospital / medical services: it guides you; it is not a stop.',
+        'Un anneau rouge autour d’une flèche barrée interdit ce virage (pas à droite, pas de demi-tour). Un disque bleu avec anneau rouge et un P ou un X est l’aide d’étude stationnement ou arrêt interdit — lisez les flèches et horaires sur la vraie plaque. MAXIMUM avec un plus grand chiffre reste une limite affichée. Un carré bleu avec H est l’hôpital : il oriente, ce n’est pas un arrêt.',
+      ),
+      signIds: [
+        'no_right_turn',
+        'no_u_turn',
+        'no_parking',
+        'no_stopping',
+        'maximum_80',
+        'hospital',
+      ],
+    ),
+    TheorySection(
+      heading: Copy(
+        'More warnings on the road',
+        'Autres dangers sur la route',
+      ),
+      body: Copy(
+        'Keep-right, merge, winding road, two-way traffic, wildlife, stop ahead, signals ahead, and no-passing warnings are yellow diamonds: prepare, then obey the regulatory sign or marking that follows. A fluorescent pentagon can also mark a playground. These drawings are original study aids, not TAC plates.',
+        'Tenez la droite, concourance, route sinueuse, double sens, faune, arrêt plus loin, feux plus loin et dépassement interdit sont des losanges jaunes : préparez-vous, puis respectez le panneau ou le marquage qui suit. Un pentagone fluorescent peut aussi marquer une aire de jeu. Dessins d’étude originaux, pas des plaques TAC.',
+      ),
+      signIds: [
+        'keep_right',
+        'merge',
+        'winding',
+        'two_way',
+        'wildlife',
+        'stop_ahead',
+        'signal_ahead',
+        'no_passing',
+        'playground',
+      ],
     ),
   ],
   quizIds: ['signs', 'sign-identify'],
@@ -87,7 +142,10 @@ const rulesTopic = TheoryTopic(
       ),
     ),
     TheorySection(
-      heading: Copy('Space, belts, and turning', 'Espace, ceintures et virages'),
+      heading: Copy(
+        'Space, belts, and turning',
+        'Espace, ceintures et virages',
+      ),
       body: Copy(
         'Seatbelts are required in every province and territory when they are fitted; drivers are typically responsible for young passengers. Leave a following gap you could stop in — longer in rain or ice. A steady red light means stop; a right turn on red is allowed in many places after a full stop unless a sign forbids it, but some cities and Québec intersections prohibit it. Always read the sign at that corner.',
         'La ceinture est obligatoire partout au Canada lorsqu’elle est installée; le conducteur est généralement responsable des jeunes passagers. Gardez un intervalle suffisant pour vous arrêter — plus long sous la pluie ou la glace. Un rouge fixe signifie arrêt; le virage à droite au rouge est souvent permis après un arrêt complet, sauf panneau contraire, mais certaines villes et intersections du Québec l’interdisent. Lisez toujours le panneau du coin.',
@@ -99,7 +157,10 @@ const rulesTopic = TheoryTopic(
   provincialNotes: [
     ProvincialNote(
       appliesTo: ['ON'],
-      heading: Copy('Ontario G1 freeway limit', 'Ontario : limite G1 sur autoroute'),
+      heading: Copy(
+        'Ontario G1 freeway limit',
+        'Ontario : limite G1 sur autoroute',
+      ),
       body: Copy(
         'A G1 driver generally may not use 400-series highways and some named expressways unless the accompanying driver is a licensed driving instructor. Confirm the current list on ontario.ca — do not treat a study app as the list.',
         'Un conducteur G1 ne peut généralement pas utiliser les autoroutes de la série 400 et certaines voies rapides nommées, sauf si l’accompagnateur est un instructeur certifié. Confirmez la liste actuelle sur ontario.ca — une appli d’étude n’est pas la liste.',
@@ -137,14 +198,20 @@ const impairmentTopic = TheoryTopic(
   ),
   sections: [
     TheorySection(
-      heading: Copy('Criminal limits vs GDL zero', 'Limites criminelles et zéro GDL'),
+      heading: Copy(
+        'Criminal limits vs GDL zero',
+        'Limites criminelles et zéro GDL',
+      ),
       body: Copy(
         'Canada’s Criminal Code sets national offences for alcohol and drug impairment, including refusing a lawful test. Provinces add licence suspensions and administrative penalties. If you are in a graduated licence stage (learner or intermediate), the expected blood-alcohol and drug standard is typically zero — even an amount that would be legal for a fully licensed driver can cost you the licence. Read your handbook’s GDL chapter, not a rumour about “one drink”.',
         'Le Code criminel fixe des infractions nationales pour l’alcool et les drogues, y compris le refus d’un test légal. Les provinces ajoutent des suspensions et des sanctions administratives. En permis progressif (apprenti ou intermédiaire), la norme attendue est généralement zéro — même une quantité qui serait légale pour un permis complet peut vous le faire perdre. Lisez le chapitre GDL de votre guide, pas une rumeur sur « un verre ».',
       ),
     ),
     TheorySection(
-      heading: Copy('Drugs, fatigue, and planning', 'Drogues, fatigue et planification'),
+      heading: Copy(
+        'Drugs, fatigue, and planning',
+        'Drogues, fatigue et planification',
+      ),
       body: Copy(
         'Cannabis, some prescriptions, and over-the-counter drugs can impair. Fatigue is treated as impairment in study material: stop and rest rather than “push through”. Plan a ride, transit, or a place to sleep before you drink or use cannabis. Open liquor in the passenger compartment is restricted; rules on storage belong in your provincial handbook. The morning after is still a risk if alcohol remains in your system.',
         'Le cannabis, certains médicaments et des produits en vente libre peuvent diminuer les facultés. La fatigue est traitée comme une forme d’inaptitude : arrêtez-vous plutôt que de « tenir le coup ». Prévoyez un transport, le transit ou un lieu pour dormir avant de boire ou de consommer du cannabis. L’alcool ouvert dans l’habitacle est encadré; les règles d’entreposage sont dans votre guide. Le lendemain matin reste un risque si l’alcool est encore dans le sang.',
@@ -215,7 +282,10 @@ const gdlTopic = TheoryTopic(
       ),
     ),
     TheorySection(
-      heading: Copy('Knowledge test, then the road', 'Connaissances, puis la route'),
+      heading: Copy(
+        'Knowledge test, then the road',
+        'Connaissances, puis la route',
+      ),
       body: Copy(
         'The knowledge test is unofficially practised here; the official sitting is at a government or insurer office, often with vision screening the same day. Passing it does not skip the learner restrictions. The road test checks control, observation, and lawful driving — not whether you memorised this app. Use the Licences tab for documents, fees (only when published), and handbook links.',
         'L’examen de connaissances se pratique ici de façon non officielle; la vraie séance a lieu dans un bureau gouvernemental ou d’assureur, souvent avec un test de vision le même jour. Le réussir ne lève pas les limites d’apprenti. L’examen pratique vérifie la maîtrise, l’observation et la conduite légale — pas la mémorisation de cette appli. L’onglet Permis donne les pièces, les tarifs (s’ils sont publiés) et les liens vers les guides.',
@@ -232,6 +302,7 @@ const List<TheoryTopic> allTheoryTopics = [
   impairmentTopic,
   winterTopic,
   gdlTopic,
+  pointsTopic,
 ];
 
 TheoryTopic? theoryTopicById(String id) {

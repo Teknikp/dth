@@ -6,17 +6,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_locale.dart';
 import '../l10n/strings.dart';
 import '../models/progress.dart';
+import '../models/study.dart';
 
 class AppState extends ChangeNotifier {
   AppState({
     required SharedPreferences prefs,
     required this.locale,
     required this.progress,
+    required this.study,
   }) : _prefs = prefs; // ignore: prefer_initializing_formals
 
   final SharedPreferences _prefs;
   AppLocale locale;
   ProgressDocument progress;
+  StudyDocument study;
 
   S get s => S(locale);
 
@@ -36,7 +39,25 @@ class AppState extends ChangeNotifier {
         progress = ProgressDocument.empty();
       }
     }
-    return AppState(prefs: store, locale: locale, progress: progress);
+    StudyDocument study;
+    final studyRaw = store.getString(StudyDocument.storageKey);
+    if (studyRaw == null || studyRaw.isEmpty) {
+      study = StudyDocument.empty();
+    } else {
+      try {
+        study = StudyDocument.fromJson(
+          jsonDecode(studyRaw) as Map<String, dynamic>,
+        );
+      } catch (_) {
+        study = StudyDocument.empty();
+      }
+    }
+    return AppState(
+      prefs: store,
+      locale: locale,
+      progress: progress,
+      study: study,
+    );
   }
 
   Future<void> setLocale(AppLocale next) async {
@@ -97,6 +118,38 @@ class AppState extends ChangeNotifier {
     goal.checks.clear();
     goal.updatedAt = DateTime.now().toUtc();
     await _persistProgress();
+  }
+
+  Future<void> _persistStudy() async {
+    study.updatedAt = DateTime.now().toUtc();
+    await _prefs.setString(
+      StudyDocument.storageKey,
+      jsonEncode(study.toJson()),
+    );
+    notifyListeners();
+  }
+
+  Future<void> toggleBookmark(String topicId) async {
+    study.toggleBookmark(topicId);
+    await _persistStudy();
+  }
+
+  Future<void> recordMisses(Iterable<String> topicIds) async {
+    final list = topicIds.where((id) => id.isNotEmpty).toList();
+    if (list.isEmpty) return;
+    study.recordMisses(list);
+    await _persistStudy();
+  }
+
+  Future<void> bookmarkTopics(Iterable<String> topicIds) async {
+    var changed = false;
+    for (final id in topicIds) {
+      if (id.isEmpty || study.bookmarks.contains(id)) continue;
+      study.bookmarks.add(id);
+      changed = true;
+    }
+    if (!changed) return;
+    await _persistStudy();
   }
 }
 

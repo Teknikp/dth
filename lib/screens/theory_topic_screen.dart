@@ -30,8 +30,7 @@ class TheoryTopicScreen extends StatelessWidget {
     final locale = AppScope.of(context).locale;
     final notes = topic.notesFor(jurisdictionCode);
     final quizzes = [
-      for (final id in topic.quizIds)
-        ...allQuizzes.where((q) => q.id == id),
+      for (final id in topic.quizIds) ...allQuizzes.where((q) => q.id == id),
     ];
     final jurisdiction = jurisdictionCode == null
         ? null
@@ -40,8 +39,20 @@ class TheoryTopicScreen extends StatelessWidget {
         ? null
         : PresentedJurisdiction.from(jurisdiction, locale);
 
+    final bookmarked = AppScope.of(context).study.isBookmarked(topic.id);
+
     return Scaffold(
-      appBar: AppBar(title: Text(topic.title.of(locale))),
+      appBar: AppBar(
+        title: Text(topic.title.of(locale)),
+        actions: [
+          IconButton(
+            key: Key('bookmark-${topic.id}'),
+            tooltip: bookmarked ? s.removeBookmark : s.bookmarkTopic,
+            onPressed: () => AppScope.of(context).toggleBookmark(topic.id),
+            icon: Icon(bookmarked ? Icons.bookmark : Icons.bookmark_outline),
+          ),
+        ],
+      ),
       body: ListView(
         key: const Key('theory-topic-list'),
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
@@ -53,10 +64,7 @@ class TheoryTopicScreen extends StatelessWidget {
           Text(s.theorySignCaption, style: theme.textTheme.bodySmall),
           for (final section in topic.sections) ...[
             const SizedBox(height: 22),
-            Text(
-              section.heading.of(locale),
-              style: theme.textTheme.titleLarge,
-            ),
+            Text(section.heading.of(locale), style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(section.body.of(locale)),
             if (section.signIds.isNotEmpty) ...[
@@ -83,6 +91,19 @@ class TheoryTopicScreen extends StatelessWidget {
                       if (note.signIds.isNotEmpty) ...[
                         const SizedBox(height: 12),
                         _SignRow(signIds: note.signIds, locale: locale),
+                      ],
+                      if (note.sources.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        SourceLinks(
+                          links: [
+                            for (final link in note.sources)
+                              PresentedLink(
+                                label: link.label,
+                                url: link.url,
+                                englishOnly: true,
+                              ),
+                          ],
+                        ),
                       ],
                     ],
                   ),
@@ -128,9 +149,7 @@ class TheoryTopicScreen extends StatelessWidget {
                 );
               },
               child: Text(
-                i == 0
-                    ? s.startTopicQuiz
-                    : quizzes[i].titleOf(locale),
+                i == 0 ? s.startTopicQuiz : quizzes[i].titleOf(locale),
               ),
             ),
             const SizedBox(height: 10),

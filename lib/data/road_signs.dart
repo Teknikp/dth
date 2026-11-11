@@ -126,6 +126,90 @@ const signOneWay = RoadSign(
   nameEn: 'One way',
   nameFr: 'Sens unique',
 );
+const signNoRight = RoadSign(
+  id: 'no_right_turn',
+  asset: 'assets/signs/no_right_turn.svg',
+  nameEn: 'No right turn',
+  nameFr: 'Interdiction de tourner à droite',
+);
+const signNoParking = RoadSign(
+  id: 'no_parking',
+  asset: 'assets/signs/no_parking.svg',
+  nameEn: 'No parking',
+  nameFr: 'Stationnement interdit',
+);
+const signNoStopping = RoadSign(
+  id: 'no_stopping',
+  asset: 'assets/signs/no_stopping.svg',
+  nameEn: 'No stopping',
+  nameFr: 'Arrêt interdit',
+);
+const signKeepRight = RoadSign(
+  id: 'keep_right',
+  asset: 'assets/signs/keep_right.svg',
+  nameEn: 'Keep right',
+  nameFr: 'Tenez la droite',
+);
+const signTwoWay = RoadSign(
+  id: 'two_way',
+  asset: 'assets/signs/two_way.svg',
+  nameEn: 'Two-way traffic',
+  nameFr: 'Circulation à double sens',
+);
+const signMerge = RoadSign(
+  id: 'merge',
+  asset: 'assets/signs/merge.svg',
+  nameEn: 'Merge',
+  nameFr: 'Concourance',
+);
+const signWinding = RoadSign(
+  id: 'winding',
+  asset: 'assets/signs/winding.svg',
+  nameEn: 'Winding road',
+  nameFr: 'Route sinueuse',
+);
+const signHospital = RoadSign(
+  id: 'hospital',
+  asset: 'assets/signs/hospital.svg',
+  nameEn: 'Hospital',
+  nameFr: 'Hôpital',
+);
+const signWildlife = RoadSign(
+  id: 'wildlife',
+  asset: 'assets/signs/wildlife.svg',
+  nameEn: 'Wildlife ahead',
+  nameFr: 'Animaux sauvages',
+);
+const signStopAhead = RoadSign(
+  id: 'stop_ahead',
+  asset: 'assets/signs/stop_ahead.svg',
+  nameEn: 'Stop ahead',
+  nameFr: 'Arrêt plus loin',
+);
+const signSignalAhead = RoadSign(
+  id: 'signal_ahead',
+  asset: 'assets/signs/signal_ahead.svg',
+  nameEn: 'Traffic signals ahead',
+  nameFr: 'Feux plus loin',
+);
+const signMaximum80 = RoadSign(
+  id: 'maximum_80',
+  asset: 'assets/signs/maximum_80.svg',
+  nameEn: 'Maximum 80',
+  nameFr: 'Maximum 80',
+);
+const signNoPassing = RoadSign(
+  id: 'no_passing',
+  asset: 'assets/signs/no_passing.svg',
+  nameEn: 'No passing',
+  nameFr: 'Dépassement interdit',
+);
+const signPlayground = RoadSign(
+  id: 'playground',
+  asset: 'assets/signs/playground.svg',
+  nameEn: 'Playground',
+  nameFr: 'Aire de jeu',
+);
 
 const List<RoadSign> allRoadSigns = [
   signStop,
@@ -146,6 +230,20 @@ const List<RoadSign> allRoadSigns = [
   signFlashYellow,
   signPavementYellow,
   signOneWay,
+  signNoRight,
+  signNoParking,
+  signNoStopping,
+  signKeepRight,
+  signTwoWay,
+  signMerge,
+  signWinding,
+  signHospital,
+  signWildlife,
+  signStopAhead,
+  signSignalAhead,
+  signMaximum80,
+  signNoPassing,
+  signPlayground,
 ];
 
 RoadSign? roadSignById(String? id) {

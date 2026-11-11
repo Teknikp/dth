@@ -515,7 +515,8 @@ const Map<String, FrQuestion> quizFr = {
     ],
     explanation: 'ARRÊT est le mot français sur beaucoup de panneaux d’arrêt au Québec. L’action est la même que STOP : arrêt complet, puis départ à votre tour.',
     topic: 'Panneaux',
-    sourceNote: 'Item d’étude non officiel basé sur le libellé des arrêts au Québec.',
+    sourceNote:
+        'Item d’étude non officiel basé sur le libellé des arrêts au Québec.',
   ),
   'gdl-zero': FrQuestion(
     prompt: 'Pendant une étape typique du permis progressif, la norme d’alcool attendue est :',
@@ -550,6 +551,182 @@ const Map<String, FrQuestion> quizFr = {
     explanation: 'L’examen de connaissances vient en premier. Réussir cette appli n’est pas cet examen. Le test de vision a souvent lieu le même jour. Il faut encore le permis d’apprenti délivré avant de conduire.',
     topic: 'Permis progressif',
   ),
+  'sign-cedez': FrQuestion(
+    prompt: 'Que signifie ce panneau?',
+    choices: [
+      'Arrêt, puis continuer comme au feu vert',
+      'Céder le passage',
+      'Stationnement réservé aux taxis',
+      'Entrée interdite',
+    ],
+    explanation: 'CÉDEZ est le libellé français de nombreux panneaux de cédez au Québec. Ralentir, être prêt à s’arrêter, et laisser passer ceux qui ont priorité.',
+    topic: 'Panneaux',
+  ),
+  'sign-curve-slow': FrQuestion(
+    prompt: 'Quand vous voyez cet avertissement, vous devez :',
+    choices: [
+      'Garder la vitesse d’autoroute; le panneau est seulement indicatif',
+      'Ralentir avant la courbe et rester dans votre voie',
+      'Vous arrêter dans la voie et attendre',
+      'Dépasser sur l’accotement',
+    ],
+    explanation: 'Un losange jaune qui annonce une courbe n’est ni un arrêt ni une nouvelle limite. Réduisez la vitesse avant le virage et tenez votre voie.',
+    topic: 'Panneaux',
+  ),
+  'sign-rail-gates': FrQuestion(
+    prompt: 'À un passage à niveau avec barrières ou feux, vous devez :',
+    choices: [
+      'Contourner les barrières baissées s’il n’y a pas de train visible',
+      'Vous arrêter seulement pour un train de marchandises',
+      'Ne jamais traverser pendant que les feux clignotent ou que les barrières sont baissées; regarder et écouter même si elles sont levées',
+      'Accélérer pour quitter les rails plus vite',
+    ],
+    explanation: 'Ne contournez jamais une barrière baissée. Si les feux clignotent, arrêtez-vous. Même barrières levées, regardez et écoutez — un second train peut suivre.',
+    topic: 'Panneaux',
+  ),
+  'rules-pass-solid': FrQuestion(
+    prompt: 'Une ligne jaune continue de votre côté signifie généralement :',
+    choices: [
+      'Vous pouvez dépasser si le véhicule devant est lent',
+      'Ne pas dépasser; rester dans votre voie',
+      'Voie réservée aux autobus',
+      'Le stationnement est permis à gauche',
+    ],
+    explanation: 'Une ligne jaune continue de votre côté interdit le dépassement. Une ligne discontinue le permet si la voie est libre. Lisez toujours le marquage avec les panneaux et la circulation.',
+    topic: 'Règles',
+  ),
+  'rules-lane-change': FrQuestion(
+    prompt: 'Avant de changer de voie, vous devez :',
+    choices: [
+      'Signaler, vérifier les rétroviseurs et l’angle mort, puis vous déporter si c’est libre',
+      'Vous déporter d’abord, puis signaler',
+      'Klaxonner et serrer sans regarder',
+      'Vous fier seulement à une caméra de recul',
+    ],
+    explanation: 'Signalez tôt, vérifiez les rétroviseurs, puis jetez un coup d’œil par-dessus l’épaule. Ne bougez que si l’espace est sûr. Les miroirs seuls ratent les véhicules à côté.',
+    topic: 'Règles',
+  ),
+  'rules-headlights-day': FrQuestion(
+    prompt: 'Quand faut-il utiliser les phares (ou les feux de jour) ?',
+    choices: [
+      'Seulement après le crépuscule civil',
+      'Dès que la visibilité est mauvaise, et souvent dès que le véhicule roule',
+      'Jamais sous la pluie, car cela draine la batterie',
+      'Seulement sur autoroute',
+    ],
+    explanation: 'Utilisez les feux pour qu’on vous voie sous la pluie, la neige, le brouillard et au crépuscule. Beaucoup de véhicules ont des feux de jour; allumez quand même les phares quand il fait sombre.',
+    topic: 'Règles',
+  ),
+  'rules-park-hill': FrQuestion(
+    prompt: 'En stationnant en montée le long d’une bordure, une méthode courante est :',
+    choices: [
+      'Roues droites et boîte au point mort',
+      'Braquer les roues pour qu’un roulement s’éloigne de la circulation (souvent vers la bordure)',
+      'Braquer vers la voie pour partir plus vite',
+      'Serrer seulement le frein de stationnement',
+    ],
+    explanation: 'En montée avec bordure, on braque souvent vers la chaussée pour que le véhicule s’appuie sur la bordure. En descente, vers la bordure. Serrez toujours le frein de stationnement.',
+    topic: 'Règles',
+  ),
+  'rules-horn': FrQuestion(
+    prompt: 'Le klaxon sert à :',
+    choices: [
+      'Avertir d’un danger, pas à gronder ni à presser',
+      'Être utilisé à chaque feu vert',
+      'Remplacer le clignotant au changement de voie',
+      'Être actionné en zone d’hôpital pour dégager la route',
+    ],
+    explanation: 'Le klaxon avertit, il n’exprime pas la colère. Le bruit inutile est souvent une infraction. Le clignotant reste obligatoire pour un changement de voie.',
+    topic: 'Règles',
+  ),
+  'gdl-display-sign': FrQuestion(
+    prompt: 'Là où un apprenti ou un novice doit afficher un L ou un N, ce panneau :',
+    choices: [
+      'Est facultatif si vous avez réussi le quiz de cette appli',
+      'Doit être affiché comme l’exige l’autorité, généralement sur le véhicule',
+      'Peut être un fond d’écran de téléphone',
+      'Ne concerne que les motos',
+    ],
+    explanation: 'La Colombie-Britannique et d’autres programmes exigent un L ou un N visible. Les règles changent selon la province. Un quiz d’étude ne remplace pas l’exigence officielle.',
+    topic: 'Permis progressif',
+  ),
+  'gdl-time-varies': FrQuestion(
+    prompt: 'Le temps minimum en étape d’apprenti ou de novice :',
+    choices: [
+      'Est de 12 mois partout au Canada',
+      'Est fixé par chaque province ou territoire et peut être plus court avec une formation approuvée — lisez la page officielle',
+      'Peut être sauté si vous avez plus de 25 ans, partout',
+      'N’est publié nulle part',
+    ],
+    explanation: 'L’Ontario, le Québec, la C.-B. et d’autres publient des délais différents (et parfois une réduction après une formation). Le Nunavut ne publie pas d’horaire GDL pluriannuel. N’apprenez pas un chiffre national unique.',
+    topic: 'Permis progressif',
+  ),
+  'gdl-night': FrQuestion(
+    prompt: 'La conduite de nuit à l’étape d’apprenti :',
+    choices: [
+      'Est libre dès que vous avez la carte',
+      'Est souvent limitée à certaines heures, sauf accompagnateur admissible — confirmez la page GDL locale',
+      'Est interdite jusqu’au permis complet',
+      'N’est permise que sur un terrain privé',
+    ],
+    explanation: 'Plusieurs permis d’apprenti interdisent la conduite tardive (par exemple G1 en Ontario, minuit–5 h). Les heures et exceptions sont provinciales.',
+    topic: 'Permis progressif',
+  ),
+  'gdl-passengers': FrQuestion(
+    prompt: 'Les limites de passagers en permis progressif :',
+    choices: [
+      'Ne s’appliquent jamais si les ceintures sont bouclées',
+      'Plafonnent souvent le nombre de personnes, surtout la nuit ou sous un certain âge — vérifiez l’étape officielle',
+      'Ne concernent que les classes commerciales',
+      'Sont identiques dans chaque province',
+    ],
+    explanation: 'Les étapes novice et parfois apprenti limitent les passagers (N en C.-B., G2 de 19 ans ou moins la nuit en Ontario, etc.). Des exceptions familiales existent. Confirmez la page de votre permis.',
+    topic: 'Permis progressif',
+  ),
+  'alc-cannabis': FrQuestion(
+    prompt: 'Le cannabis et la conduite au Canada :',
+    choices: [
+      'Est légal pour tout conducteur titulaire si vous attendez dix minutes',
+      'Peut diminuer les facultés, est une question pénale et de permis, et le GDL exige généralement zéro',
+      'N’est un problème que si vous avez aussi bu',
+      'N’affecte pas le temps de réaction',
+    ],
+    explanation: 'La conduite avec facultés affaiblies par la drogue est une infraction au Code criminel. Les étapes GDL exigent généralement une concentration nulle de drogue comme d’alcool.',
+    topic: 'Facultés affaiblies',
+  ),
+  'alc-prescription': FrQuestion(
+    prompt: 'Un médicament sur ordonnance ou en vente libre qui cause de la somnolence :',
+    choices: [
+      'Est toujours sûr parce qu’un médecin l’a prescrit',
+      'Peut quand même diminuer les facultés; lisez l’étiquette et ne conduisez pas si vous n’êtes pas alerte',
+      'Ne concerne que les permis commerciaux',
+      'Est permis si vous restez dans la voie de droite',
+    ],
+    explanation: 'Un médicament légal peut quand même diminuer les facultés. Si l’étiquette déconseille de manœuvrer une machine, ne conduisez pas.',
+    topic: 'Facultés affaiblies',
+  ),
+  'win-visibility': FrQuestion(
+    prompt: 'Si la poudrerie ou le brouillard réduit ce que vous voyez, vous devez :',
+    choices: [
+      'Garder la vitesse d’autoroute pour ne pas surprendre derrière',
+      'Ralentir, allumer les phares, et laisser un intervalle suffisant pour vous arrêter',
+      'N’utiliser que les feux de stationnement',
+      'Coller au véhicule devant',
+    ],
+    explanation: 'Roulez de façon à pouvoir vous arrêter dans la distance visible. Les phares (pas les feux de route dans le brouillard) aident les autres à vous voir.',
+    topic: 'Hiver',
+  ),
+  'win-stuck': FrQuestion(
+    prompt: 'Si vous êtes coincé dans un blizzard loin de l’aide, une recommandation courante est :',
+    choices: [
+      'Quitter le véhicule et marcher vers le dernier village',
+      'Rester dans le véhicule, laisser une vitre légèrement ouverte, et faire tourner le moteur seulement pour la chaleur',
+      'Dormir dans un banc de neige à côté',
+      'Boire de l’alcool pour se réchauffer',
+    ],
+    explanation: 'Le véhicule est un abri plus facile à trouver. Dégagez le tuyau d’échappement pour éviter le monoxyde de carbone. Marchez seulement si l’aide est clairement proche.',
+    topic: 'Hiver',
+  ),
 };
 
 const Map<String, (String, String)> quizMetaFr = {
@@ -569,7 +746,19 @@ const Map<String, (String, String)> quizMetaFr = {
     'Supervision, zéro alcool, et connaissances puis route',
   ),
   'mixed': (
-    'Pratique mixte (20)',
-    'Une séance de 20 questions tirées de tous les sujets',
+    'Pratique mixte (30)',
+    'Une séance de 30 questions tirées de tous les sujets',
+  ),
+  'points': (
+    'Points d’inaptitude et pénalités',
+    'Régimes provinciaux et territoriaux, d’après les pages officielles',
+  ),
+  'mock': (
+    'Examen blanc (non officiel)',
+    'Séance de 40 questions, score en %, seuil d’étude de 80 % — pas une note officielle',
+  ),
+  'weak': (
+    'Sujets à revoir',
+    'Questions tirées des sujets marqués ou manqués',
   ),
 };

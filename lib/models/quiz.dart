@@ -1,4 +1,5 @@
 import '../data/quiz_fr.dart';
+import '../data/quiz_fr_extra.dart';
 import '../l10n/app_locale.dart';
 
 class PracticeQuestion {
@@ -31,9 +32,29 @@ class PracticeQuestion {
 
   bool get isNational => appliesTo.isEmpty;
 
+  /// Maps the English topic label to a theory-topic id for bookmarks.
+  String get topicId {
+    switch (topic) {
+      case 'Signs':
+        return 'signs';
+      case 'Rules':
+        return 'rules';
+      case 'Impairment':
+        return 'impairment';
+      case 'Winter':
+        return 'winter';
+      case 'GDL':
+        return 'gdl';
+      case 'Points':
+        return 'points';
+      default:
+        return topic.toLowerCase();
+    }
+  }
+
   bool isCorrect(int index) => index == correctIndex;
 
-  FrQuestion? get _fr => quizFr[id];
+  FrQuestion? get _fr => quizFr[id] ?? quizFrExtra[id];
 
   String promptOf(AppLocale locale) =>
       locale.isFr ? (_fr?.prompt ?? prompt) : prompt;
@@ -58,6 +79,7 @@ class PracticeQuiz {
     required this.subtitle,
     required this.questionIds,
     this.sampleSize,
+    this.unofficialPassPercent,
   });
 
   final String id;
@@ -67,6 +89,12 @@ class PracticeQuiz {
 
   /// If set, a random subset of this size is used for a sitting.
   final int? sampleSize;
+
+  /// Study-only pass-style threshold. Null means no pass/fail label.
+  /// Never treat this as an official knowledge-test pass mark.
+  final int? unofficialPassPercent;
+
+  bool get isScoredMock => unofficialPassPercent != null;
 
   String titleOf(AppLocale locale) =>
       locale.isFr ? (quizMetaFr[id]?.$1 ?? title) : title;
