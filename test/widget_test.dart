@@ -222,16 +222,9 @@ void main() {
     await tester.tap(find.text('Ontario').last);
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Checklist for Ontario'), findsOneWidget);
-    final knowledge = find.descendant(
-      of: find.byKey(const Key('check-ON.knowledge')),
-      matching: find.byType(Checkbox),
-    );
-    await tester.scrollUntilVisible(
-      knowledge,
-      400,
-      scrollable: find.byType(Scrollable).first,
-    );
+    expect(find.textContaining('Trail — Ontario'), findsOneWidget);
+    expect(find.byKey(const Key('progress-car')), findsOneWidget);
+    final knowledge = find.byKey(const Key('check-ON.knowledge'));
     await tester.ensureVisible(knowledge);
     await tester.pumpAndSettle();
     await tester.tap(knowledge);

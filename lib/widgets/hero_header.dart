@@ -5,15 +5,21 @@ import '../theme/app_theme.dart';
 import 'language_toggle.dart';
 
 class HeroHeader extends StatelessWidget {
-  const HeroHeader({super.key, required this.title, required this.subtitle});
+  const HeroHeader({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    this.compact = false,
+  });
 
   final String title;
   final String subtitle;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 22),
+      padding: EdgeInsets.fromLTRB(20, 8, 20, compact ? 14 : 22),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -44,18 +50,23 @@ class HeroHeader extends StatelessWidget {
                 const LanguageToggle(),
               ],
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: compact ? 10 : 18),
             Text(
               title,
-              style: Theme.of(context).textTheme.headlineMedium
+              style: (compact
+                      ? Theme.of(context).textTheme.titleLarge
+                      : Theme.of(context).textTheme.headlineMedium)
                   ?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               subtitle,
+              maxLines: compact ? 2 : 4,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Colors.white.withValues(alpha: 0.92),
-                height: 1.4,
+                height: 1.35,
+                fontSize: compact ? 13 : null,
               ),
             ),
             const SizedBox(height: 4),

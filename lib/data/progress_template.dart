@@ -18,6 +18,8 @@ List<ProgressItemDef> progressItemsFor(Jurisdiction j) {
       group: 'prepare',
       titleEn: 'Gather accepted identity documents',
       titleFr: 'Rassembler les pièces d’identité acceptées',
+      shortEn: 'ID',
+      shortFr: 'Pièces',
       detailEn: 'Original, valid ID as listed by ${j.authority}.',
       detailFr:
           'Pièces originales et valides, selon ${frenchFor(code)?.authority ?? j.authority}.',
@@ -27,18 +29,24 @@ List<ProgressItemDef> progressItemsFor(Jurisdiction j) {
       group: 'prepare',
       titleEn: 'Parental consent if you are under the local age',
       titleFr: 'Consentement parental si vous n’avez pas l’âge requis',
+      shortEn: 'Consent',
+      shortFr: 'Accord',
     ),
     ProgressItemDef(
       id: '$code.knowledge',
       group: 'tests',
       titleEn: 'Pass the knowledge test',
       titleFr: 'Réussir l’examen de connaissances',
+      shortEn: 'Knowledge',
+      shortFr: 'Quiz',
     ),
     ProgressItemDef(
       id: '$code.vision',
       group: 'tests',
       titleEn: 'Pass the vision screening',
       titleFr: 'Réussir le test de vision',
+      shortEn: 'Vision',
+      shortFr: 'Vision',
     ),
     ProgressItemDef(
       id: '$code.road',
@@ -46,6 +54,8 @@ List<ProgressItemDef> progressItemsFor(Jurisdiction j) {
       titleEn: 'Pass the first road test (when you are eligible)',
       titleFr:
           'Réussir le premier examen pratique (lorsque vous y êtes admissible)',
+      shortEn: 'Road',
+      shortFr: 'Route',
     ),
     for (var i = 0; i < j.stages.length; i++)
       ProgressItemDef(
@@ -54,6 +64,8 @@ List<ProgressItemDef> progressItemsFor(Jurisdiction j) {
         titleEn: 'Complete: ${j.stages[i].name}',
         titleFr:
             'Terminer : ${frenchFor(code)?.stages.elementAtOrNull(i)?.name ?? j.stages[i].name}',
+        shortEn: j.stages[i].classCode,
+        shortFr: j.stages[i].classCode,
         detailEn: j.stages[i].duration,
         detailFr:
             frenchFor(code)?.stages.elementAtOrNull(i)?.duration ??

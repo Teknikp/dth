@@ -171,7 +171,7 @@ class S {
   String get resetChecks => clearChecks;
   String get quizHubLead => practiceCanada;
   String get quizHubBody => practiceCanada;
-  String get progressLead => progressEmpty;
+  String get progressLead => progressMapLead;
   String get progressBody => progressOnDevice;
   String get aboutTitle => about;
   String get aboutLead => aboutIntro;
@@ -204,4 +204,19 @@ class S {
       ? 'Dessin d’étude original, pas une plaque officielle.'
       : 'Original study-aid drawing, not an official plate.';
   String get fromTheory => isFr ? 'Depuis la théorie' : 'From theory';
+  String get progressMapLead => isFr
+      ? 'Touchez une étape pour la cocher. La voiture avance sur le sentier.'
+      : 'Tap a stop to check it off. The car rolls along the path.';
+  String get mapStart => isFr ? 'Départ' : 'Start';
+  String get mapFinish => isFr ? 'Permis' : 'Licence';
+  String get markStopDone => isFr ? 'Marquer comme fait' : 'Mark as done';
+  String get clearStop => isFr ? 'Retirer la coche' : 'Clear this stop';
+  String get backToMap => isFr ? 'Retour à la carte' : 'Back to the map';
+  String get unofficialMap => isFr
+      ? 'Carte d’étude, pas un avis juridique.'
+      : 'Study map, not legal advice.';
+  String get yourLicenceMap =>
+      isFr ? 'Carte du permis' : 'Licence map';
+  String mapFor(String name) =>
+      isFr ? 'Sentier — $name' : 'Trail — $name';
 }

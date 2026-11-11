@@ -6,9 +6,9 @@ import '../data/progress_template.dart';
 import '../models/jurisdiction.dart';
 import '../models/progress.dart';
 import '../state/app_state.dart';
-import '../theme/accents.dart';
 import '../widgets/disclaimer_banner.dart';
 import '../widgets/hero_header.dart';
+import '../widgets/journey_map.dart';
 import 'requirements_screen.dart';
 
 class ProgressScreen extends StatelessWidget {
@@ -24,26 +24,29 @@ class ProgressScreen extends StatelessWidget {
         : jurisdictionByCode(goal.jurisdictionCode);
     return Column(
       children: [
-        HeroHeader(title: s.progressTitle, subtitle: s.progressLead),
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 18, 20, 32),
+        HeroHeader(
+          title: s.progressTitle,
+          subtitle: s.progressMapLead,
+          compact: true,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const DisclaimerBanner(),
-              const SizedBox(height: 16),
-              Text(
-                s.progressBody,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 16),
+              const DisclaimerBanner(compact: true),
+              const SizedBox(height: 10),
               _GoalPicker(selectedCode: goal?.jurisdictionCode),
-              const SizedBox(height: 20),
-              if (jurisdiction == null)
-                Text(s.pickGoalHint)
-              else
-                _Checklist(jurisdiction: jurisdiction, goal: goal!),
             ],
           ),
+        ),
+        Expanded(
+          child: jurisdiction == null
+              ? Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(s.pickGoalHint),
+                )
+              : _MapPanel(jurisdiction: jurisdiction, goal: goal!),
         ),
       ],
     );
@@ -59,56 +62,49 @@ class _GoalPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = AppScope.s(context);
     final locale = AppScope.of(context).locale;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(s.yourGoal, style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 8),
-        KeyedSubtree(
-          key: const Key('goal-province'),
-          child: DropdownButtonFormField<String>(
-            key: ValueKey('goal-${selectedCode ?? 'none'}'),
-            initialValue: selectedCode,
-            hint: Text(s.chooseProvince),
-            items: [
-              for (final j in allJurisdictions)
-                DropdownMenuItem(
-                  value: j.code,
-                  child: Text(jurisdictionName(j, french: locale.isFr)),
-                ),
-            ],
-            onChanged: (code) async {
-              if (code == null) return;
-              final state = AppScope.of(context);
-              final now = DateTime.now().toUtc();
-              final existing = state.progress.goals
-                  .cast<LicenceGoal?>()
-                  .firstWhere(
-                    (g) =>
-                        g?.jurisdictionCode == code &&
-                        g?.kind == LicenceGoal.firstPassengerLicence,
-                    orElse: () => null,
-                  );
-              await state.setActiveGoal(
-                existing ??
-                    LicenceGoal(
-                      id: 'goal_${code}_${now.microsecondsSinceEpoch}',
-                      jurisdictionCode: code,
-                      kind: LicenceGoal.firstPassengerLicence,
-                      createdAt: now,
-                      updatedAt: now,
-                    ),
+    return KeyedSubtree(
+      key: const Key('goal-province'),
+      child: DropdownButtonFormField<String>(
+        key: ValueKey('goal-${selectedCode ?? 'none'}'),
+        initialValue: selectedCode,
+        hint: Text(s.chooseProvince),
+        items: [
+          for (final j in allJurisdictions)
+            DropdownMenuItem(
+              value: j.code,
+              child: Text(jurisdictionName(j, french: locale.isFr)),
+            ),
+        ],
+        onChanged: (code) async {
+          if (code == null) return;
+          final state = AppScope.of(context);
+          final now = DateTime.now().toUtc();
+          final existing = state.progress.goals
+              .cast<LicenceGoal?>()
+              .firstWhere(
+                (g) =>
+                    g?.jurisdictionCode == code &&
+                    g?.kind == LicenceGoal.firstPassengerLicence,
+                orElse: () => null,
               );
-            },
-          ),
-        ),
-      ],
+          await state.setActiveGoal(
+            existing ??
+                LicenceGoal(
+                  id: 'goal_${code}_${now.microsecondsSinceEpoch}',
+                  jurisdictionCode: code,
+                  kind: LicenceGoal.firstPassengerLicence,
+                  createdAt: now,
+                  updatedAt: now,
+                ),
+          );
+        },
+      ),
     );
   }
 }
 
-class _Checklist extends StatelessWidget {
-  const _Checklist({required this.jurisdiction, required this.goal});
+class _MapPanel extends StatelessWidget {
+  const _MapPanel({required this.jurisdiction, required this.goal});
 
   final Jurisdiction jurisdiction;
   final LicenceGoal goal;
@@ -120,77 +116,116 @@ class _Checklist extends StatelessWidget {
     final locale = AppScope.of(context).locale;
     final items = progressItemsFor(jurisdiction);
     final done = items.where((i) => goal.isDone(i.id)).length;
-    final accent = accentFor(jurisdiction.code);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          s.checklistFor(jurisdictionName(jurisdiction, french: locale.isFr)),
-          style: theme.textTheme.titleLarge,
-        ),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: LinearProgressIndicator(
-            value: items.isEmpty ? 0 : done / items.length,
-            minHeight: 10,
-            color: accent,
-            backgroundColor: accent.withValues(alpha: 0.16),
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(s.doneOf(done, items.length), style: theme.textTheme.labelLarge),
-        const SizedBox(height: 8),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => RequirementsScreen(jurisdiction: jurisdiction),
+    final doneIds = {
+      for (final i in items)
+        if (goal.isDone(i.id)) i.id,
+    };
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  s.mapFor(
+                    jurisdictionName(jurisdiction, french: locale.isFr),
+                  ),
+                  style: theme.textTheme.titleMedium,
+                ),
               ),
-            );
-          },
-          child: Text(s.openRequirements),
-        ),
-        const SizedBox(height: 8),
-        for (final item in items)
-          _CheckTile(item: item, checked: goal.isDone(item.id)),
-        const SizedBox(height: 8),
-        OutlinedButton(
-          onPressed: () => AppScope.of(context).resetChecks(),
-          child: Text(s.resetChecks),
-        ),
-      ],
+              Text(
+                s.doneOf(done, items.length),
+                style: theme.textTheme.labelLarge,
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Expanded(
+            child: JourneyMap(
+              items: items,
+              done: doneIds,
+              locale: locale,
+              strings: s,
+              onSelect: (item) {
+                final was = goal.isDone(item.id);
+                if (!was) {
+                  AppScope.of(context).toggleCheck(item.id, done: true);
+                }
+                _openStop(context, item, true);
+              },
+            ),
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          RequirementsScreen(jurisdiction: jurisdiction),
+                    ),
+                  );
+                },
+                child: Text(s.openRequirements),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => AppScope.of(context).resetChecks(),
+                child: Text(s.resetChecks),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
-}
 
-class _CheckTile extends StatelessWidget {
-  const _CheckTile({required this.item, required this.checked});
-
-  final ProgressItemDef item;
-  final bool checked;
-
-  @override
-  Widget build(BuildContext context) {
+  Future<void> _openStop(
+    BuildContext context,
+    ProgressItemDef item,
+    bool checked,
+  ) async {
+    final s = AppScope.s(context);
     final locale = AppScope.of(context).locale;
-    return Card(
-      key: Key('check-${item.id}'),
-      child: CheckboxListTile(
-        value: checked,
-        onChanged: (v) =>
-            AppScope.of(context).toggleCheck(item.id, done: v ?? false),
-        title: Text(item.title(locale)),
-        subtitle: item.detail(locale).isEmpty
-            ? null
-            : Text(item.detail(locale)),
-        secondary: Icon(switch (item.kind) {
-          ProgressItemKind.knowledge => Icons.menu_book_outlined,
-          ProgressItemKind.vision => Icons.visibility_outlined,
-          ProgressItemKind.road => Icons.directions_car_outlined,
-          ProgressItemKind.wait => Icons.hourglass_bottom_outlined,
-          ProgressItemKind.admin => Icons.badge_outlined,
-        }),
-      ),
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheet) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                item.title(locale),
+                style: Theme.of(sheet).textTheme.titleLarge,
+              ),
+              if (item.detail(locale).isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(item.detail(locale)),
+              ],
+              const SizedBox(height: 8),
+              Text(s.unofficialMap, style: Theme.of(sheet).textTheme.bodySmall),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () => Navigator.pop(sheet),
+                child: Text(s.backToMap),
+              ),
+              if (checked)
+                TextButton(
+                  onPressed: () {
+                    AppScope.of(context).toggleCheck(item.id, done: false);
+                    Navigator.pop(sheet);
+                  },
+                  child: Text(s.clearStop),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
