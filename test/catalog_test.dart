@@ -5,12 +5,14 @@ import 'package:licence_prep/data/catalog.dart';
 import 'package:licence_prep/data/french/catalog_fr.dart';
 import 'package:licence_prep/data/progress_template.dart';
 import 'package:licence_prep/data/quiz_fr.dart';
+import 'package:licence_prep/data/quiz_fr_extra.dart';
 import 'package:licence_prep/data/quizzes.dart';
 import 'package:licence_prep/data/road_signs.dart';
 import 'package:licence_prep/data/theory_content.dart';
 import 'package:licence_prep/models/jurisdiction.dart';
 import 'package:licence_prep/models/progress.dart';
 import 'package:licence_prep/models/quiz.dart';
+import 'package:licence_prep/models/study.dart';
 
 void main() {
   test('covers all 13 provinces and territories', () {
@@ -87,11 +89,40 @@ void main() {
     expect(questions, hasLength(30));
   });
 
+  test('mock exam is a 40-question unofficial sitting', () {
+    expect(mockQuiz.sampleSize, 40);
+    expect(mockQuiz.unofficialPassPercent, 80);
+    expect(questionsForQuiz(mockQuiz, seed: 3), hasLength(40));
+    final attempt = QuizAttempt(
+      quiz: mockQuiz,
+      questions: questionsForQuiz(mockQuiz, seed: 3),
+    );
+    for (var i = 0; i < 32; i++) {
+      attempt.answers[i] = attempt.questions[i].correctIndex;
+    }
+    expect(attempt.percent, closeTo(80, 0.05));
+  });
+
   test('topic quizzes are longer than a handful of items', () {
     expect(questionsForQuiz(signsQuiz).length, greaterThanOrEqualTo(15));
     expect(questionsForQuiz(rulesQuiz).length, greaterThanOrEqualTo(15));
     expect(questionsForQuiz(gdlQuiz).length, greaterThanOrEqualTo(8));
-    expect(allQuestions.length, greaterThanOrEqualTo(60));
+    expect(questionsForQuiz(pointsQuiz).length, greaterThanOrEqualTo(15));
+    expect(allQuestions.length, greaterThanOrEqualTo(80));
+    expect(
+      questionsForQuiz(mockQuiz, jurisdictionCode: 'ON', seed: 2),
+      hasLength(40),
+    );
+    expect(
+      questionsForQuiz(pointsQuiz, jurisdictionCode: 'ON')
+          .map((q) => q.id)
+          .toSet(),
+      containsAll(['pts-on-15', 'pts-not-national']),
+    );
+    expect(
+      questionsForQuiz(pointsQuiz, jurisdictionCode: 'ON').map((q) => q.id),
+      isNot(contains('pts-qc-25')),
+    );
   });
 
   test('every jurisdiction has a French overlay of matching shape', () {
@@ -109,7 +140,7 @@ void main() {
 
   test('every quiz question has French copy with the same choice count', () {
     for (final q in allQuestions) {
-      final fr = quizFr[q.id];
+      final fr = quizFr[q.id] ?? quizFrExtra[q.id];
       expect(fr, isNotNull, reason: q.id);
       expect(fr!.choices, hasLength(q.choices.length), reason: q.id);
       expect(fr.prompt, isNotEmpty, reason: q.id);
@@ -141,6 +172,20 @@ void main() {
     expect(copy.toJson()['schemaVersion'], 1);
   });
 
+  test('study bookmarks stay off the progress JSON key', () {
+    final now = DateTime.utc(2026, 11, 11);
+    final doc = StudyDocument(
+      updatedAt: now,
+      bookmarks: {'signs', 'points'},
+      weakCounts: {'rules': 2},
+    );
+    final copy = StudyDocument.fromJson(doc.toJson());
+    expect(copy.bookmarks, {'points', 'signs'});
+    expect(copy.weakCounts['rules'], 2);
+    expect(copy.toJson()['schemaVersion'], 1);
+    expect(StudyDocument.storageKey, isNot(ProgressDocument.storageKey));
+  });
+
   test('sign drawings exist and quiz signIds resolve', () {
     for (final sign in allRoadSigns) {
       expect(File(sign.asset).existsSync(), isTrue, reason: sign.id);
@@ -152,6 +197,7 @@ void main() {
     for (final q in questionsForQuiz(signIdentifyQuiz)) {
       expect(q.signId, isNotNull, reason: q.id);
     }
+    expect(allRoadSigns.length, greaterThanOrEqualTo(30));
   });
 
   test('theory topics are bilingual and point at real quizzes', () {
@@ -161,6 +207,7 @@ void main() {
       'impairment',
       'winter',
       'gdl',
+      'points',
     });
     final quizIds = allQuizzes.map((q) => q.id).toSet();
     for (final topic in allTheoryTopics) {
@@ -182,6 +229,21 @@ void main() {
       for (final id in topic.quizIds) {
         expect(quizIds, contains(id), reason: topic.id);
       }
+    }
+  });
+
+  test('points topic cites official https sources for every jurisdiction', () {
+    final topic = theoryTopicById('points')!;
+    expect(topic.showAllNotesWhenNational, isTrue);
+    expect(topic.notesFor(null), hasLength(expectedJurisdictionCodes.length));
+    for (final code in expectedJurisdictionCodes) {
+      final notes = topic.notesFor(code);
+      expect(notes, isNotEmpty, reason: code);
+      expect(notes.first.sources, isNotEmpty, reason: code);
+      for (final link in notes.first.sources) {
+        expect(link.url, startsWith('https://'), reason: '$code ${link.label}');
+      }
+      expect(notes.first.body.fr, isNotEmpty, reason: code);
     }
   });
 

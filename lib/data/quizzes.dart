@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../models/quiz.dart';
+import 'quizzes_extra.dart';
 
 const List<PracticeQuestion> allQuestions = [
   PracticeQuestion(
@@ -871,6 +872,7 @@ const List<PracticeQuestion> allQuestions = [
     explanation: 'The vehicle is shelter and easier to find. Clear the exhaust of snow so carbon monoxide cannot enter. Walk only if help is clearly close. This is study advice, not a survival course.',
     topic: 'Winter',
   ),
+  ...extraQuestions,
 ];
 
 const signsQuiz = PracticeQuiz(
@@ -895,6 +897,14 @@ const signsQuiz = PracticeQuiz(
     'sign-one-way',
     'sign-curve-slow',
     'sign-rail-gates',
+    'sign-no-right',
+    'sign-no-parking',
+    'sign-no-stopping',
+    'sign-keep-right',
+    'sign-merge',
+    'sign-winding',
+    'sign-hospital',
+    'sign-maximum-80',
   ],
 );
 
@@ -920,6 +930,15 @@ const signIdentifyQuiz = PracticeQuiz(
     'sign-rail',
     'sign-cedez',
     'sign-curve-slow',
+    'sign-no-right',
+    'sign-no-parking',
+    'sign-two-way',
+    'sign-wildlife',
+    'sign-stop-ahead',
+    'sign-signal-ahead',
+    'sign-no-passing',
+    'sign-playground',
+    'sign-no-stopping',
   ],
 );
 
@@ -1010,10 +1029,58 @@ const mixedQuiz = PracticeQuiz(
   sampleSize: 30,
 );
 
+const pointsQuiz = PracticeQuiz(
+  id: 'points',
+  title: 'Demerit and penalty points',
+  subtitle: 'Provincial and territorial systems, from official pages',
+  questionIds: [
+    'pts-not-national',
+    'pts-gdl-lower',
+    'pts-on-zero',
+    'pts-on-15',
+    'pts-on-novice',
+    'pts-on-handheld',
+    'pts-qc-learner',
+    'pts-qc-25',
+    'pts-bc-dpp',
+    'pts-ab-15',
+    'pts-ab-gdl',
+    'pts-sk-letter',
+    'pts-mb-dsr',
+    'pts-ns-learner',
+    'pts-nl-12',
+    'pts-yt-gdl',
+    'pts-nt-24',
+    'pts-nb-warn',
+    'pts-pe-12',
+    'pts-nu-regs',
+  ],
+);
+
+const mockQuiz = PracticeQuiz(
+  id: 'mock',
+  title: 'Mock exam (unofficial)',
+  subtitle:
+      'Full 40-question sitting, score percent, 80% study threshold — not an official pass mark',
+  questionIds: [],
+  sampleSize: 40,
+  unofficialPassPercent: 80,
+);
+
+const weakQuiz = PracticeQuiz(
+  id: 'weak',
+  title: 'Saved and weak topics',
+  subtitle: 'A sitting drawn from topics you bookmarked or missed',
+  questionIds: [],
+  sampleSize: 20,
+);
+
 const List<PracticeQuiz> allQuizzes = [
+  mockQuiz,
   signsQuiz,
   signIdentifyQuiz,
   rulesQuiz,
+  pointsQuiz,
   impairmentQuiz,
   winterQuiz,
   gdlQuiz,
@@ -1031,9 +1098,10 @@ List<PracticeQuestion> questionsForQuiz(
   PracticeQuiz quiz, {
   String? jurisdictionCode,
   int? seed,
+  Set<String>? topicIds,
 }) {
   final pool = <PracticeQuestion>[];
-  if (quiz.id == mixedQuiz.id) {
+  if (quiz.questionIds.isEmpty) {
     pool.addAll(allQuestions);
   } else {
     for (final id in quiz.questionIds) {
@@ -1043,6 +1111,11 @@ List<PracticeQuestion> questionsForQuiz(
   }
 
   final filtered = pool.where((q) {
+    if (topicIds != null &&
+        topicIds.isNotEmpty &&
+        !topicIds.contains(q.topicId)) {
+      return false;
+    }
     if (q.appliesTo.isEmpty) return true;
     if (jurisdictionCode == null) return true;
     return q.appliesTo.contains(jurisdictionCode);

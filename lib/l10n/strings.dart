@@ -232,4 +232,38 @@ class S {
   String get gdlWaitUnpublished => isFr
       ? 'Cette administration ne publie pas d’horaire GDL pluriannuel comme la plupart des provinces. Le texte ci-dessous est ce que les pages actuelles disent — rien n’est inventé.'
       : 'This authority does not publish a multi-year GDL timetable like most provinces. The text below is what the current pages say — nothing is invented.';
+  String get startMockExam =>
+      isFr ? 'Commencer l’examen blanc' : 'Start mock exam';
+  String scorePercent(int n) => isFr ? 'Score : $n %' : 'Score: $n%';
+  String unofficialPassLabel(int n) => isFr
+      ? 'Seuil d’étude non officiel : $n %. Ce n’est pas la note de passage d’un examen officiel — les vrais tests diffèrent selon la province ou le territoire.'
+      : 'Unofficial study threshold: $n%. This is not an official pass mark — real tests differ by province or territory.';
+  String get unofficialPass => isFr
+      ? 'Au-dessus de ce seuil d’étude non officiel.'
+      : 'Above this unofficial study threshold.';
+  String get unofficialFail => isFr
+      ? 'Sous ce seuil d’étude non officiel. Révisez, puis réessayez.'
+      : 'Below this unofficial study threshold. Review, then try again.';
+  String get bookmarkTopic =>
+      isFr ? 'Enregistrer ce sujet' : 'Bookmark this topic';
+  String get removeBookmark =>
+      isFr ? 'Retirer le signet' : 'Remove bookmark';
+  String get savedTopics =>
+      isFr ? 'Sujets enregistrés et à revoir' : 'Saved and weak topics';
+  String get weakTopicsLead =>
+      isFr ? 'Questions manquées' : 'Missed questions';
+  String get weakTopicsBody => isFr
+      ? 'Les sujets manqués sont enregistrés sur l’appareil. Vous pouvez aussi les marquer pour les revoir.'
+      : 'Missed topics are stored on this device. You can also bookmark them to review later.';
+  String get saveMissedTopics => isFr
+      ? 'Enregistrer les sujets manqués'
+      : 'Save missed topics';
+  String get saveTopic => isFr ? 'Enregistrer' : 'Save topic';
+  String get topicsSaved =>
+      isFr ? 'Sujets enregistrés sur l’appareil.' : 'Topics saved on this device.';
+  String reviewTopic(String name) =>
+      isFr ? 'Revoir : $name' : 'Review: $name';
+  String get practiceSavedTopics =>
+      isFr ? 'Pratiquer les sujets enregistrés' : 'Practice saved topics';
+  String missedCount(int n) => isFr ? '$n manquée(s)' : '$n missed';
 }

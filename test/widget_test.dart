@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:licence_prep/app.dart';
+import 'package:licence_prep/data/quizzes.dart';
+import 'package:licence_prep/screens/quiz_result_screen.dart';
 import 'package:licence_prep/state/app_state.dart';
+import 'package:licence_prep/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<LicencePrepApp> pumpApp(WidgetTester tester) async {
@@ -75,13 +78,36 @@ void main() {
   });
 
   testWidgets('practice tab opens the signs quiz', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     await pumpApp(tester);
 
     await tester.tap(find.byKey(const Key('nav-practice')));
     await tester.pumpAndSettle();
 
     expect(find.text('Practice quizzes'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('quiz-signs')));
+    expect(find.byKey(const Key('quiz-mock')), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('quiz-signs')),
+      300,
+      scrollable: verticalScroll(const Key('quiz-hub-list')),
+    );
+    await tester.ensureVisible(
+      find.descendant(
+        of: find.byKey(const Key('quiz-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('quiz-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('quiz-prompt')), findsOneWidget);
   });
@@ -278,5 +304,85 @@ void main() {
           .first,
     );
     expect(find.text('Open the official handbook or guide'), findsOneWidget);
+  });
+
+  testWidgets('theory bookmark persists on device', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await pumpApp(tester);
+    await tester.tap(find.byKey(const Key('nav-theory')));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('theory-signs')),
+      300,
+      scrollable: verticalScroll(const Key('theory-list')),
+    );
+    await tester.ensureVisible(
+      find.descendant(
+        of: find.byKey(const Key('theory-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('theory-signs')),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('bookmark-signs')));
+    await tester.pumpAndSettle();
+
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString('licence_prep.study.v1');
+    expect(raw, isNotNull);
+    expect(raw, contains('signs'));
+    expect(prefs.getString('licence_prep.progress.v1'), isNull);
+  });
+
+  testWidgets('mock result shows unofficial percent and can save a weak topic', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final state = await AppState.load();
+    final questions = questionsForQuiz(signsQuiz).take(5).toList();
+    final wrong =
+        (questions.first.correctIndex + 1) % questions.first.choices.length;
+    await tester.pumpWidget(
+      AppScope(
+        state: state,
+        child: ListenableBuilder(
+          listenable: state,
+          builder: (context, _) {
+            return MaterialApp(
+              theme: AppTheme.light(),
+              home: QuizResultScreen(
+                quiz: mockQuiz,
+                questions: questions,
+                score: 4,
+                answers: {
+                  0: wrong,
+                  for (var i = 1; i < questions.length; i++)
+                    i: questions[i].correctIndex,
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('mock-percent')), findsOneWidget);
+    expect(find.textContaining('Score: 80%'), findsOneWidget);
+    expect(find.byKey(const Key('mock-threshold')), findsOneWidget);
+    expect(find.textContaining('Unofficial study threshold: 80%'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('save-missed-topics')));
+    await tester.pumpAndSettle();
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('licence_prep.study.v1'), contains('signs'));
   });
 }

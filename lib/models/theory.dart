@@ -1,4 +1,5 @@
 import '../l10n/app_locale.dart';
+import 'jurisdiction.dart';
 
 class Copy {
   const Copy(this.en, this.fr);
@@ -27,12 +28,14 @@ class ProvincialNote {
     required this.heading,
     required this.body,
     this.signIds = const [],
+    this.sources = const [],
   });
 
   final List<String> appliesTo;
   final Copy heading;
   final Copy body;
   final List<String> signIds;
+  final List<OfficialLink> sources;
 
   bool matches(String? code) => code != null && appliesTo.contains(code);
 }
@@ -47,6 +50,7 @@ class TheoryTopic {
     required this.quizIds,
     this.provincialNotes = const [],
     this.usesJurisdictionGdl = false,
+    this.showAllNotesWhenNational = false,
   });
 
   final String id;
@@ -57,7 +61,12 @@ class TheoryTopic {
   final List<String> quizIds;
   final List<ProvincialNote> provincialNotes;
   final bool usesJurisdictionGdl;
+  final bool showAllNotesWhenNational;
 
-  List<ProvincialNote> notesFor(String? code) =>
-      provincialNotes.where((n) => n.matches(code)).toList();
+  List<ProvincialNote> notesFor(String? code) {
+    if (code == null) {
+      return showAllNotesWhenNational ? provincialNotes : const [];
+    }
+    return provincialNotes.where((n) => n.appliesTo.contains(code)).toList();
+  }
 }

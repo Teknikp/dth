@@ -72,6 +72,7 @@ class _TheoryHubScreenState extends State<TheoryHubScreen> {
                 ),
               ),
               const SizedBox(height: 20),
+              _SavedTopics(jurisdictionCode: _code),
               for (final topic in allTheoryTopics) ...[
                 _TopicCard(
                   topic: topic,
@@ -85,6 +86,61 @@ class _TheoryHubScreenState extends State<TheoryHubScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SavedTopics extends StatelessWidget {
+  const _SavedTopics({this.jurisdictionCode});
+
+  final String? jurisdictionCode;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = AppScope.s(context);
+    final locale = AppScope.of(context).locale;
+    final study = AppScope.of(context).study;
+    final ids = study.savedTopicIds
+        .where((id) => theoryTopicById(id) != null)
+        .toList();
+    if (ids.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(s.savedTopics, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final id in ids)
+                ActionChip(
+                  key: Key('saved-topic-$id'),
+                  avatar: Icon(
+                    study.isBookmarked(id)
+                        ? Icons.bookmark
+                        : Icons.flag_outlined,
+                    size: 18,
+                  ),
+                  label: Text(theoryTopicById(id)!.title.of(locale)),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => TheoryTopicScreen(
+                          topic: theoryTopicById(id)!,
+                          jurisdictionCode: jurisdictionCode,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
     );
   }
 }
@@ -143,6 +199,8 @@ class _TopicCard extends StatelessWidget {
         return Icons.ac_unit;
       case 'gdl':
         return Icons.school_outlined;
+      case 'points':
+        return Icons.gavel_outlined;
       default:
         return Icons.menu_book_outlined;
     }
@@ -187,7 +245,19 @@ class _TopicCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: theme.textTheme.titleMedium),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(title, style: theme.textTheme.titleMedium),
+                        ),
+                        if (AppScope.of(context).study.isBookmarked(topic.id))
+                          Icon(
+                            Icons.bookmark,
+                            key: Key('hub-bookmark-${topic.id}'),
+                            color: theme.colorScheme.primary,
+                          ),
+                      ],
+                    ),
                     const SizedBox(height: 4),
                     Text(subtitle),
                     const SizedBox(height: 12),

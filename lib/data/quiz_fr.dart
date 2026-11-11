@@ -749,4 +749,16 @@ const Map<String, (String, String)> quizMetaFr = {
     'Pratique mixte (30)',
     'Une séance de 30 questions tirées de tous les sujets',
   ),
+  'points': (
+    'Points d’inaptitude et pénalités',
+    'Régimes provinciaux et territoriaux, d’après les pages officielles',
+  ),
+  'mock': (
+    'Examen blanc (non officiel)',
+    'Séance de 40 questions, score en %, seuil d’étude de 80 % — pas une note officielle',
+  ),
+  'weak': (
+    'Sujets à revoir',
+    'Questions tirées des sujets marqués ou manqués',
+  ),
 };

@@ -1,4 +1,5 @@
 import '../models/theory.dart';
+import 'theory_points.dart';
 
 const signsTopic = TheoryTopic(
   id: 'signs',
@@ -29,7 +30,18 @@ const signsTopic = TheoryTopic(
         'A red octagon means stop: full stop before the line or crosswalk, then go only when it is your turn and safe. An inverted red-and-white triangle means yield: slow, be ready to stop, and give way. A red circle with a white bar means do not enter. A white rectangle with MAXIMUM and a number is a posted speed limit. A red ring around a black arrow with a slash forbids that movement (no left turn, no U-turn).',
         'Un octogone rouge signifie arrêt : immobilisation complète avant la ligne ou le passage, puis départ seulement à votre tour et en sécurité. Un triangle inversé rouge et blanc signifie cédez : ralentir, être prêt à s’arrêter, et laisser passer. Un cercle rouge avec une barre blanche signifie entrée interdite. Un rectangle blanc avec MAXIMUM et un chiffre est une limite affichée. Un anneau rouge autour d’une flèche barrée interdit ce mouvement (pas à gauche, pas de demi-tour).',
       ),
-      signIds: ['stop', 'yield', 'do_not_enter', 'maximum_50', 'no_left_turn'],
+      signIds: [
+        'stop',
+        'yield',
+        'do_not_enter',
+        'maximum_50',
+        'no_left_turn',
+        'no_right_turn',
+        'no_u_turn',
+        'no_parking',
+        'no_stopping',
+        'maximum_80',
+      ],
     ),
     TheorySection(
       heading: Copy('Warnings, school, and rail', 'Dangers, école et rail'),
@@ -37,7 +49,23 @@ const signsTopic = TheoryTopic(
         'Yellow diamonds warn of curves, merges, ice, pedestrians, and similar hazards. A fluorescent yellow-green pentagon marks a school area or school crossing — watch for children; a separate sign may post a school-zone speed. An X-shaped crossbuck marks a railway crossing: look, listen, and never go around lowered gates. These signs do not replace a stop or a speed limit; they tell you to prepare.',
         'Les losanges jaunes préviennent des courbes, des concourances, de la glace, des piétons et d’autres risques. Un pentagone jaune-vert fluorescent marque une zone ou une traverse scolaire — surveillez les enfants; une limite scolaire peut être affichée à part. Un X marque un passage à niveau : regarder, écouter, et ne jamais contourner une barrière baissée. Ces panneaux ne remplacent pas un arrêt ou une limite; ils demandent de se préparer.',
       ),
-      signIds: ['school', 'railway', 'slippery', 'pedestrian', 'roundabout'],
+      signIds: [
+        'school',
+        'railway',
+        'slippery',
+        'pedestrian',
+        'roundabout',
+        'keep_right',
+        'merge',
+        'winding',
+        'two_way',
+        'wildlife',
+        'stop_ahead',
+        'signal_ahead',
+        'no_passing',
+        'playground',
+        'hospital',
+      ],
     ),
     TheorySection(
       heading: Copy('Lights and pavement', 'Feux et marquage'),
@@ -250,6 +278,7 @@ const List<TheoryTopic> allTheoryTopics = [
   impairmentTopic,
   winterTopic,
   gdlTopic,
+  pointsTopic,
 ];
 
 TheoryTopic? theoryTopicById(String id) {

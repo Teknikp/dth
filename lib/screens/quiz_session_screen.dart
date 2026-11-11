@@ -13,10 +13,12 @@ class QuizSessionScreen extends StatefulWidget {
     super.key,
     required this.quiz,
     this.jurisdictionCode,
+    this.topicIds,
   });
 
   final PracticeQuiz quiz;
   final String? jurisdictionCode;
+  final Set<String>? topicIds;
 
   @override
   State<QuizSessionScreen> createState() => _QuizSessionScreenState();
@@ -36,6 +38,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     _questions = questionsForQuiz(
       widget.quiz,
       jurisdictionCode: widget.jurisdictionCode,
+      topicIds: widget.topicIds,
     );
   }
 
@@ -51,8 +54,16 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     });
   }
 
-  void _next() {
+  Future<void> _next() async {
     if (_index + 1 >= _questions.length) {
+      final missed = <String>[];
+      for (var i = 0; i < _questions.length; i++) {
+        if (_answers[i] != _questions[i].correctIndex) {
+          missed.add(_questions[i].topicId);
+        }
+      }
+      await AppScope.of(context).recordMisses(missed);
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
           builder: (_) => QuizResultScreen(
