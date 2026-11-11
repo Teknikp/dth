@@ -30,8 +30,7 @@ class TheoryTopicScreen extends StatelessWidget {
     final locale = AppScope.of(context).locale;
     final notes = topic.notesFor(jurisdictionCode);
     final quizzes = [
-      for (final id in topic.quizIds)
-        ...allQuizzes.where((q) => q.id == id),
+      for (final id in topic.quizIds) ...allQuizzes.where((q) => q.id == id),
     ];
     final jurisdiction = jurisdictionCode == null
         ? null
@@ -53,10 +52,7 @@ class TheoryTopicScreen extends StatelessWidget {
           Text(s.theorySignCaption, style: theme.textTheme.bodySmall),
           for (final section in topic.sections) ...[
             const SizedBox(height: 22),
-            Text(
-              section.heading.of(locale),
-              style: theme.textTheme.titleLarge,
-            ),
+            Text(section.heading.of(locale), style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(section.body.of(locale)),
             if (section.signIds.isNotEmpty) ...[
@@ -128,9 +124,7 @@ class TheoryTopicScreen extends StatelessWidget {
                 );
               },
               child: Text(
-                i == 0
-                    ? s.startTopicQuiz
-                    : quizzes[i].titleOf(locale),
+                i == 0 ? s.startTopicQuiz : quizzes[i].titleOf(locale),
               ),
             ),
             const SizedBox(height: 10),

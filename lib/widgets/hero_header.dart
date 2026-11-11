@@ -53,10 +53,14 @@ class HeroHeader extends StatelessWidget {
             SizedBox(height: compact ? 10 : 18),
             Text(
               title,
-              style: (compact
-                      ? Theme.of(context).textTheme.titleLarge
-                      : Theme.of(context).textTheme.headlineMedium)
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
+              style:
+                  (compact
+                          ? Theme.of(context).textTheme.titleLarge
+                          : Theme.of(context).textTheme.headlineMedium)
+                      ?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                      ),
             ),
             const SizedBox(height: 6),
             Text(

@@ -17,7 +17,8 @@ Finder verticalScroll(Key key) {
   return find.descendant(
     of: find.byKey(key),
     matching: find.byWidgetPredicate(
-      (widget) => widget is Scrollable && widget.axisDirection == AxisDirection.down,
+      (widget) =>
+          widget is Scrollable && widget.axisDirection == AxisDirection.down,
     ),
   );
 }
@@ -192,7 +193,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.textContaining('Comment les panneaux sont groupés'), findsOneWidget);
+    expect(
+      find.textContaining('Comment les panneaux sont groupés'),
+      findsOneWidget,
+    );
 
     await tester.scrollUntilVisible(
       find.byKey(const Key('theory-quiz-sign-identify')),
@@ -206,7 +210,7 @@ void main() {
   });
 
   testWidgets('progress tab tracks a province on device', (tester) async {
-    tester.view.physicalSize = const Size(800, 1400);
+    tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -224,6 +228,7 @@ void main() {
 
     expect(find.textContaining('Trail — Ontario'), findsOneWidget);
     expect(find.byKey(const Key('progress-car')), findsOneWidget);
+    expect(find.byKey(const Key('gdl-wait-times')), findsOneWidget);
     final knowledge = find.byKey(const Key('check-ON.knowledge'));
     await tester.ensureVisible(knowledge);
     await tester.pumpAndSettle();
@@ -235,5 +240,43 @@ void main() {
     expect(raw, isNotNull);
     expect(raw, contains('ON.knowledge'));
     expect(raw, contains('"accountId":null'));
+  });
+
+  testWidgets('progress shows cited GDL stage times, not invented queues', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await pumpApp(tester);
+    await tester.tap(find.byKey(const Key('nav-progress')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('goal-province')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ontario').last);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('gdl-wait-times')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Official GDL stage times'), findsWidgets);
+    expect(find.textContaining('Usually 12 months'), findsOneWidget);
+    expect(
+      find.textContaining('This is not a booking-queue estimate'),
+      findsOneWidget,
+    );
+    await tester.scrollUntilVisible(
+      find.text('Open the official handbook or guide'),
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byType(DraggableScrollableSheet),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    expect(find.text('Open the official handbook or guide'), findsOneWidget);
   });
 }

@@ -34,8 +34,7 @@ class ProvincialNote {
   final Copy body;
   final List<String> signIds;
 
-  bool matches(String? code) =>
-      code != null && appliesTo.contains(code);
+  bool matches(String? code) => code != null && appliesTo.contains(code);
 }
 
 class TheoryTopic {

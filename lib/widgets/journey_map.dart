@@ -41,22 +41,30 @@ class _JourneyMapState extends State<JourneyMap>
     _t = _targetT();
     _car = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 2000),
     );
     _tAnim = AlwaysStoppedAnimation(_t);
-    _car.addListener(() => setState(() => _t = _tAnim.value));
   }
 
   @override
   void didUpdateWidget(covariant JourneyMap oldWidget) {
     super.didUpdateWidget(oldWidget);
     final next = _targetT();
-    if ((next - _t).abs() < 0.001) return;
-    _tAnim = Tween<double>(begin: _t, end: next).animate(
-      CurvedAnimation(parent: _car, curve: Curves.easeInOutCubic),
+    final from = _displayT;
+    if ((next - from).abs() < 0.001) return;
+    final span = (next - from).abs();
+    _car.duration = Duration(
+      milliseconds: (1800 + span * 1600).round().clamp(1800, 3200),
     );
+    _tAnim = Tween<double>(
+      begin: from,
+      end: next,
+    ).animate(CurvedAnimation(parent: _car, curve: Curves.easeInOutCubic));
+    _t = next;
     _car.forward(from: 0);
   }
+
+  double get _displayT => _car.isAnimating ? _tAnim.value : _t;
 
   @override
   void dispose() {
@@ -71,54 +79,60 @@ class _JourneyMapState extends State<JourneyMap>
     for (var i = 0; i < n; i++) {
       if (widget.done.contains(widget.items[i].id)) furthest = i;
     }
-    // Start dock is t=0; stations sit at (i+1)/n.
-    return (furthest + 1) / n;
+    if (furthest < 0) return 0;
+    if (furthest >= n - 1) return 1;
+    return TrailGeometry.stationT(furthest, n);
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final size = Size(
-          constraints.maxWidth,
-          math.max(constraints.maxHeight, 520),
-        );
+        final width = constraints.maxWidth;
+        final height = constraints.maxHeight.isFinite
+            ? constraints.maxHeight
+            : 420.0;
+        final size = Size(width, math.max(height, 1));
         final geo = TrailGeometry.forCount(widget.items.length, size);
-        final carPos = geo.along(_t);
+        final compact = size.height < 400;
         return ClipRRect(
           borderRadius: BorderRadius.circular(22),
           child: SizedBox(
             width: size.width,
             height: size.height,
-            child: Stack(
-              clipBehavior: Clip.hardEdge,
-              children: [
-                CustomPaint(
-                  size: size,
-                  painter: _IslandPainter(
-                    geometry: geo,
-                    progressT: _t,
-                  ),
-                ),
-                for (var i = 0; i < widget.items.length; i++)
-                  _StopNode(
-                    item: widget.items[i],
-                    offset: geo.stations[i],
-                    done: widget.done.contains(widget.items[i].id),
-                    next: _isNext(i),
-                    label: widget.items[i].shortLabel(widget.locale),
-                    onTap: () => widget.onSelect(widget.items[i]),
-                  ),
-                _StartBadge(
-                  offset: geo.start,
-                  label: widget.strings.mapStart,
-                ),
-                _FinishBadge(
-                  offset: geo.finish,
-                  label: widget.strings.mapFinish,
-                ),
-                _CarToken(pose: carPos),
-              ],
+            child: AnimatedBuilder(
+              animation: _car,
+              builder: (context, _) {
+                final t = _displayT;
+                return Stack(
+                  clipBehavior: Clip.hardEdge,
+                  children: [
+                    CustomPaint(
+                      size: size,
+                      painter: _IslandPainter(geometry: geo, progressT: t),
+                    ),
+                    for (var i = 0; i < widget.items.length; i++)
+                      _StopNode(
+                        item: widget.items[i],
+                        offset: geo.stations[i],
+                        done: widget.done.contains(widget.items[i].id),
+                        next: _isNext(i),
+                        label: widget.items[i].shortLabel(widget.locale),
+                        compact: compact,
+                        onTap: () => widget.onSelect(widget.items[i]),
+                      ),
+                    _StartBadge(
+                      offset: geo.start,
+                      label: widget.strings.mapStart,
+                    ),
+                    _FinishBadge(
+                      offset: geo.finish,
+                      label: widget.strings.mapFinish,
+                    ),
+                    _CarToken(pose: geo.along(t)),
+                  ],
+                );
+              },
             ),
           ),
         );
@@ -155,19 +169,32 @@ class TrailGeometry {
   final Offset finish;
   final List<Offset> stations;
 
+  static double stationT(int index, int n) {
+    if (n <= 0) return 0;
+    return (index + 1) / (n + 1);
+  }
+
   factory TrailGeometry.forCount(int n, Size size) {
     final w = size.width;
     final h = size.height;
+    // Keep nodes, labels, and the car inside the clip on a phone.
+    final left = 48.0;
+    final right = w - 48.0;
+    final top = 56.0;
+    final bottom = h - 62.0;
+    final rw = math.max(right - left, 8.0);
+    final rh = math.max(bottom - top, 8.0);
+    Offset p(double nx, double ny) => Offset(left + nx * rw, top + ny * rh);
     final waypoints = <Offset>[
-      Offset(w * 0.22, h * 0.84),
-      Offset(w * 0.42, h * 0.74),
-      Offset(w * 0.70, h * 0.64),
-      Offset(w * 0.78, h * 0.50),
-      Offset(w * 0.48, h * 0.42),
-      Offset(w * 0.24, h * 0.32),
-      Offset(w * 0.38, h * 0.22),
-      Offset(w * 0.66, h * 0.15),
-      Offset(w * 0.80, h * 0.10),
+      p(0.08, 0.92),
+      p(0.34, 0.78),
+      p(0.72, 0.66),
+      p(0.86, 0.48),
+      p(0.42, 0.40),
+      p(0.14, 0.28),
+      p(0.40, 0.16),
+      p(0.70, 0.10),
+      p(0.88, 0.04),
     ];
     final path = Path()..moveTo(waypoints.first.dx, waypoints.first.dy);
     for (var i = 1; i < waypoints.length; i++) {
@@ -194,14 +221,12 @@ class TrailGeometry {
 
     final stations = n <= 0
         ? const <Offset>[]
-        : [
-            for (var i = 0; i < n; i++) at((i + 0.55) / (n + 0.6)),
-          ];
+        : [for (var i = 0; i < n; i++) at(stationT(i, n))];
     return TrailGeometry._(
       size: size,
       path: path,
-      start: at(0.02),
-      finish: at(0.98),
+      start: at(0),
+      finish: at(1),
       stations: stations,
     );
   }
@@ -335,7 +360,8 @@ class _IslandPainter extends CustomPainter {
       size.width * 0.42,
       inner,
     );
-    final speckle = Paint()..color = const Color(0xFFC4A05A).withValues(alpha: 0.28);
+    final speckle = Paint()
+      ..color = const Color(0xFFC4A05A).withValues(alpha: 0.28);
     final rng = math.Random(7);
     for (var i = 0; i < 48; i++) {
       canvas.drawCircle(
@@ -365,7 +391,10 @@ class _IslandPainter extends CustomPainter {
   void _blob(Canvas canvas, Offset c, double rx, double ry, Color color) {
     final path = Path()
       ..addOval(Rect.fromCenter(center: c, width: rx * 2, height: ry * 2));
-    canvas.drawPath(path, Paint()..color = const Color(0xFF0A3D48).withValues(alpha: 0.2));
+    canvas.drawPath(
+      path,
+      Paint()..color = const Color(0xFF0A3D48).withValues(alpha: 0.2),
+    );
     canvas.drawPath(path, Paint()..color = color);
     canvas.drawPath(
       path,
@@ -415,7 +444,7 @@ class _IslandPainter extends CustomPainter {
     final remaining = Paint()
       ..color = const Color(0xFF5C3A1E)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
+      ..strokeWidth = 5.5
       ..strokeCap = StrokeCap.round;
     _dash(canvas, geometry.path, remaining, 7, 8);
 
@@ -427,7 +456,7 @@ class _IslandPainter extends CustomPainter {
         Paint()
           ..color = const Color(0xFF0B6E63)
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 5.5
+          ..strokeWidth = 7
           ..strokeCap = StrokeCap.round,
       );
       canvas.drawPath(
@@ -457,7 +486,7 @@ class _IslandPainter extends CustomPainter {
   }
 
   void _paintCompass(Canvas canvas, Size size) {
-    final c = Offset(size.width - 28, 28);
+    final c = Offset(size.width - 32, 32);
     canvas.drawCircle(c, 16, Paint()..color = const Color(0xFFFFF6DC));
     canvas.drawCircle(
       c,
@@ -501,6 +530,7 @@ class _StopNode extends StatelessWidget {
     required this.done,
     required this.next,
     required this.label,
+    required this.compact,
     required this.onTap,
   });
 
@@ -509,25 +539,29 @@ class _StopNode extends StatelessWidget {
   final bool done;
   final bool next;
   final String label;
+  final bool compact;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final node = compact ? 30.0 : 34.0;
+    final width = compact ? 58.0 : 64.0;
     return Positioned(
-      left: offset.dx - 28,
-      top: offset.dy - 28,
+      left: offset.dx - width / 2,
+      top: offset.dy - node / 2 - 2,
       child: GestureDetector(
         key: Key('check-${item.id}'),
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
         child: SizedBox(
-          width: 56,
-          height: 70,
+          width: width,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 280),
-                width: 36,
-                height: 36,
+                width: node,
+                height: node,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: done ? const Color(0xFFF1C40F) : Colors.white,
@@ -546,25 +580,38 @@ class _StopNode extends StatelessWidget {
                 child: Center(
                   child: done
                       ? const CustomPaint(
-                          size: Size(16, 16),
+                          size: Size(15, 15),
                           painter: _StarPainter(),
                         )
                       : Icon(
                           _iconFor(item.kind),
-                          size: 16,
+                          size: compact ? 14 : 16,
                           color: AppTheme.deep,
                         ),
                 ),
               ),
-              const SizedBox(height: 2),
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF3A2410),
+              const SizedBox(height: 3),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF6DC).withValues(alpha: 0.94),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 2,
+                  ),
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: compact ? 9 : 10,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF3A2410),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -624,8 +671,8 @@ class _StartBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: offset.dx - 28,
-      top: offset.dy + 10,
+      left: offset.dx + 16,
+      top: offset.dy - 10,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
@@ -654,17 +701,27 @@ class _FinishBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: offset.dx - 22,
-      top: offset.dy - 40,
-      child: Column(
+      left: offset.dx - 78,
+      top: offset.dy - 14,
+      child: Row(
         children: [
-          const CustomPaint(size: Size(22, 22), painter: _StarPainter()),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF7A4A00),
+          const CustomPaint(size: Size(16, 16), painter: _StarPainter()),
+          const SizedBox(width: 4),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF6DC).withValues(alpha: 0.94),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF7A4A00),
+                ),
+              ),
             ),
           ),
         ],
@@ -680,14 +737,29 @@ class _CarToken extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var heading = pose.angle;
+    while (heading > math.pi) {
+      heading -= 2 * math.pi;
+    }
+    while (heading < -math.pi) {
+      heading += 2 * math.pi;
+    }
+    final faceLeft = heading.abs() > math.pi / 2;
+    var lean = faceLeft
+        ? (heading > 0 ? heading - math.pi : heading + math.pi)
+        : heading;
+    lean = lean.clamp(-0.38, 0.38);
     return Positioned(
-      left: pose.offset.dx - 18,
-      top: pose.offset.dy - 28,
-      child: Transform.rotate(
-        angle: pose.angle + math.pi / 2,
+      left: pose.offset.dx - 20,
+      top: pose.offset.dy - 26,
+      child: Transform(
+        alignment: Alignment.center,
+        transform: Matrix4.identity()
+          ..rotateZ(lean)
+          ..scale(faceLeft ? -1.0 : 1.0, 1.0, 1.0),
         child: const CustomPaint(
           key: Key('progress-car'),
-          size: Size(36, 22),
+          size: Size(40, 24),
           painter: _CarPainter(),
         ),
       ),

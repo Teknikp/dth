@@ -82,9 +82,16 @@ void main() {
     expect(attempt.answeredCount, 2);
   });
 
-  test('mixed practice returns 20 questions', () {
+  test('mixed practice returns 30 questions', () {
     final questions = questionsForQuiz(mixedQuiz, seed: 7);
-    expect(questions, hasLength(20));
+    expect(questions, hasLength(30));
+  });
+
+  test('topic quizzes are longer than a handful of items', () {
+    expect(questionsForQuiz(signsQuiz).length, greaterThanOrEqualTo(15));
+    expect(questionsForQuiz(rulesQuiz).length, greaterThanOrEqualTo(15));
+    expect(questionsForQuiz(gdlQuiz).length, greaterThanOrEqualTo(8));
+    expect(allQuestions.length, greaterThanOrEqualTo(60));
   });
 
   test('every jurisdiction has a French overlay of matching shape', () {
@@ -164,7 +171,11 @@ void main() {
         expect(section.heading.fr, isNotEmpty, reason: topic.id);
         expect(section.body.fr, isNotEmpty, reason: topic.id);
         for (final signId in section.signIds) {
-          expect(roadSignById(signId), isNotNull, reason: '${topic.id} $signId');
+          expect(
+            roadSignById(signId),
+            isNotNull,
+            reason: '${topic.id} $signId',
+          );
         }
       }
       expect(topic.quizIds, isNotEmpty, reason: topic.id);

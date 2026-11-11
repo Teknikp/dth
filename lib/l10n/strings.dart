@@ -191,8 +191,7 @@ class S {
   String get canadaWide => isFr ? 'Pancanadien' : 'Canada-wide';
   String get startTopicQuiz =>
       isFr ? 'Questionnaire sur ce sujet' : 'Practice this topic';
-  String get moreQuizzes =>
-      isFr ? 'Autres questionnaires' : 'More quizzes';
+  String get moreQuizzes => isFr ? 'Autres questionnaires' : 'More quizzes';
   String get openLesson => isFr ? 'Ouvrir la leçon' : 'Open lesson';
   String get gdlStagesHere => isFr
       ? 'Étapes chez vous (résumé non officiel)'
@@ -215,8 +214,22 @@ class S {
   String get unofficialMap => isFr
       ? 'Carte d’étude, pas un avis juridique.'
       : 'Study map, not legal advice.';
-  String get yourLicenceMap =>
-      isFr ? 'Carte du permis' : 'Licence map';
-  String mapFor(String name) =>
-      isFr ? 'Sentier — $name' : 'Trail — $name';
+  String get yourLicenceMap => isFr ? 'Carte du permis' : 'Licence map';
+  String mapFor(String name) => isFr ? 'Sentier — $name' : 'Trail — $name';
+  String get gdlWaitTitle => isFr
+      ? 'Délais officiels du permis progressif'
+      : 'Official GDL stage times';
+  String get gdlWaitButton =>
+      isFr ? 'Délais GDL officiels' : 'Official GDL times';
+  String get gdlWaitLead => isFr
+      ? 'Temps minimum publié pour chaque étape, d’après l’autorité de délivrance. Les files d’attente pour réserver un examen ne figurent ici que si la page officielle les publie — sinon nous le disons.'
+      : 'Minimum time in each licence stage, as published by the licensing authority. Road-test booking queues appear here only if that official page published them — otherwise we say so.';
+  String get gdlWaitNotBooking => isFr
+      ? 'Ce n’est pas un délai de rendez-vous. Confirmez sur la page citée; les règles changent.'
+      : 'This is not a booking-queue estimate. Confirm on the cited page; rules change.';
+  String get gdlWaitOpenSources =>
+      isFr ? 'Ouvrir les pages officielles' : 'Open official pages';
+  String get gdlWaitUnpublished => isFr
+      ? 'Cette administration ne publie pas d’horaire GDL pluriannuel comme la plupart des provinces. Le texte ci-dessous est ce que les pages actuelles disent — rien n’est inventé.'
+      : 'This authority does not publish a multi-year GDL timetable like most provinces. The text below is what the current pages say — nothing is invented.';
 }

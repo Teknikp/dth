@@ -44,11 +44,13 @@ In Android Studio’s SDK Manager, that is **Android API 36**, matching **SDK Bu
 
 - Pick a province or territory, then read GDL stages, knowledge vs road tests, documents, medical/vision notes, and fees **only when published**.
 - Official source buttons and handbook links on each jurisdiction page.
-- Practice quizzes with immediate explanations, clearly labelled unofficial.
+- Practice quizzes with immediate explanations, clearly labelled unofficial. Mixed sittings are 30 questions; topic quizzes are longer study sets. Sign items keep the original in-repo graphics.
 - **Theory** tab: handbook-style lessons (signs, rules, impairment, winter, GDL) then quizzes. Canada-wide where the idea is shared; provincial notes where rules differ (pick a study place).
 - Sign questions show an **original in-repo graphic** and ask what it means — not a text-only description of the shape.
 - English and French in-app, with a persistent EN/FR toggle. Official legal pages stay linked in the government’s language.
-- On-device progress as a **licence map**: a parchment island trail with a car that moves as you check off documents, tests, and GDL stages. Same `licence_prep.progress.v1` JSON. No accounts.
+- On-device progress as a **licence map**: a parchment island trail with a car that stays on the path (upright, no flip) as you check off documents, tests, and GDL stages. Same `licence_prep.progress.v1` JSON. No accounts.
+- Progress also lists **official GDL stage times** (MTO, SAAQ, ICBC, and the other provincial/territorial pages already cited in the app). Booking queues are not invented; if a page did not publish a wait, the app says so.
+- Custom **Licence Prep / Prépa Permis** splash on Android (including Android 12) and iOS, plus an in-app branded loader. The default white Flutter splash is gone.
 
 ## Sign graphics (copyright)
 

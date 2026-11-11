@@ -13,7 +13,10 @@ const signsTopic = TheoryTopic(
   ),
   sections: [
     TheorySection(
-      heading: Copy('How signs are grouped', 'Comment les panneaux sont groupés'),
+      heading: Copy(
+        'How signs are grouped',
+        'Comment les panneaux sont groupés',
+      ),
       body: Copy(
         'Handbooks group traffic control into a few families. Regulatory signs tell you a rule you must follow (stop, speed, turn bans). Warning signs tell you to prepare for a hazard or a change in the road. Signals and pavement markings work with signs; they can also stand alone. Information signs (hospital, parking, route markers) guide you but are not the main knowledge-test focus.',
         'Les guides regroupent la signalisation en quelques familles. Les panneaux de prescription donnent une règle à suivre (arrêt, vitesse, interdiction de tourner). Les panneaux de danger vous demandent de vous préparer à un risque ou à un changement. Les feux et le marquage travaillent avec les panneaux; ils peuvent aussi suffire seuls. Les panneaux d’indication (hôpital, stationnement, itinéraire) orientent, mais ce n’est pas le cœur de l’examen.',
@@ -87,7 +90,10 @@ const rulesTopic = TheoryTopic(
       ),
     ),
     TheorySection(
-      heading: Copy('Space, belts, and turning', 'Espace, ceintures et virages'),
+      heading: Copy(
+        'Space, belts, and turning',
+        'Espace, ceintures et virages',
+      ),
       body: Copy(
         'Seatbelts are required in every province and territory when they are fitted; drivers are typically responsible for young passengers. Leave a following gap you could stop in — longer in rain or ice. A steady red light means stop; a right turn on red is allowed in many places after a full stop unless a sign forbids it, but some cities and Québec intersections prohibit it. Always read the sign at that corner.',
         'La ceinture est obligatoire partout au Canada lorsqu’elle est installée; le conducteur est généralement responsable des jeunes passagers. Gardez un intervalle suffisant pour vous arrêter — plus long sous la pluie ou la glace. Un rouge fixe signifie arrêt; le virage à droite au rouge est souvent permis après un arrêt complet, sauf panneau contraire, mais certaines villes et intersections du Québec l’interdisent. Lisez toujours le panneau du coin.',
@@ -99,7 +105,10 @@ const rulesTopic = TheoryTopic(
   provincialNotes: [
     ProvincialNote(
       appliesTo: ['ON'],
-      heading: Copy('Ontario G1 freeway limit', 'Ontario : limite G1 sur autoroute'),
+      heading: Copy(
+        'Ontario G1 freeway limit',
+        'Ontario : limite G1 sur autoroute',
+      ),
       body: Copy(
         'A G1 driver generally may not use 400-series highways and some named expressways unless the accompanying driver is a licensed driving instructor. Confirm the current list on ontario.ca — do not treat a study app as the list.',
         'Un conducteur G1 ne peut généralement pas utiliser les autoroutes de la série 400 et certaines voies rapides nommées, sauf si l’accompagnateur est un instructeur certifié. Confirmez la liste actuelle sur ontario.ca — une appli d’étude n’est pas la liste.',
@@ -137,14 +146,20 @@ const impairmentTopic = TheoryTopic(
   ),
   sections: [
     TheorySection(
-      heading: Copy('Criminal limits vs GDL zero', 'Limites criminelles et zéro GDL'),
+      heading: Copy(
+        'Criminal limits vs GDL zero',
+        'Limites criminelles et zéro GDL',
+      ),
       body: Copy(
         'Canada’s Criminal Code sets national offences for alcohol and drug impairment, including refusing a lawful test. Provinces add licence suspensions and administrative penalties. If you are in a graduated licence stage (learner or intermediate), the expected blood-alcohol and drug standard is typically zero — even an amount that would be legal for a fully licensed driver can cost you the licence. Read your handbook’s GDL chapter, not a rumour about “one drink”.',
         'Le Code criminel fixe des infractions nationales pour l’alcool et les drogues, y compris le refus d’un test légal. Les provinces ajoutent des suspensions et des sanctions administratives. En permis progressif (apprenti ou intermédiaire), la norme attendue est généralement zéro — même une quantité qui serait légale pour un permis complet peut vous le faire perdre. Lisez le chapitre GDL de votre guide, pas une rumeur sur « un verre ».',
       ),
     ),
     TheorySection(
-      heading: Copy('Drugs, fatigue, and planning', 'Drogues, fatigue et planification'),
+      heading: Copy(
+        'Drugs, fatigue, and planning',
+        'Drogues, fatigue et planification',
+      ),
       body: Copy(
         'Cannabis, some prescriptions, and over-the-counter drugs can impair. Fatigue is treated as impairment in study material: stop and rest rather than “push through”. Plan a ride, transit, or a place to sleep before you drink or use cannabis. Open liquor in the passenger compartment is restricted; rules on storage belong in your provincial handbook. The morning after is still a risk if alcohol remains in your system.',
         'Le cannabis, certains médicaments et des produits en vente libre peuvent diminuer les facultés. La fatigue est traitée comme une forme d’inaptitude : arrêtez-vous plutôt que de « tenir le coup ». Prévoyez un transport, le transit ou un lieu pour dormir avant de boire ou de consommer du cannabis. L’alcool ouvert dans l’habitacle est encadré; les règles d’entreposage sont dans votre guide. Le lendemain matin reste un risque si l’alcool est encore dans le sang.',
@@ -215,7 +230,10 @@ const gdlTopic = TheoryTopic(
       ),
     ),
     TheorySection(
-      heading: Copy('Knowledge test, then the road', 'Connaissances, puis la route'),
+      heading: Copy(
+        'Knowledge test, then the road',
+        'Connaissances, puis la route',
+      ),
       body: Copy(
         'The knowledge test is unofficially practised here; the official sitting is at a government or insurer office, often with vision screening the same day. Passing it does not skip the learner restrictions. The road test checks control, observation, and lawful driving — not whether you memorised this app. Use the Licences tab for documents, fees (only when published), and handbook links.',
         'L’examen de connaissances se pratique ici de façon non officielle; la vraie séance a lieu dans un bureau gouvernemental ou d’assureur, souvent avec un test de vision le même jour. Le réussir ne lève pas les limites d’apprenti. L’examen pratique vérifie la maîtrise, l’observation et la conduite légale — pas la mémorisation de cette appli. L’onglet Permis donne les pièces, les tarifs (s’ils sont publiés) et les liens vers les guides.',

@@ -42,7 +42,10 @@ class _TheoryHubScreenState extends State<TheoryHubScreen> {
               const SizedBox(height: 16),
               Text(s.theoryBody, style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(height: 18),
-              Text(s.studyPlace, style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                s.studyPlace,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 10),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
