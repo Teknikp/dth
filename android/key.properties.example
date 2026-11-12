@@ -1,0 +1,10 @@
+# Copy to android/key.properties (gitignored) and fill from your password manager.
+# Never commit key.properties, *.jks, or *.keystore.
+#
+# Play App Signing: Google stores the app signing key. This keystore is only the
+# upload key you use to sign AABs before they go to Play.
+
+storePassword=replace-me
+keyPassword=replace-me
+keyAlias=upload
+storeFile=../upload-keystore.jks

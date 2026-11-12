@@ -211,6 +211,13 @@ class S {
   String get markStopDone => isFr ? 'Marquer comme fait' : 'Mark as done';
   String get clearStop => isFr ? 'Retirer la coche' : 'Clear this stop';
   String get backToMap => isFr ? 'Retour à la carte' : 'Back to the map';
+  String get previousStep => isFr ? 'Étape précédente' : 'Previous step';
+  String get nextStep => isFr ? 'Étape suivante' : 'Next step';
+  String get sourcesByPlace => isFr
+      ? 'Groupées par province et territoire. Chaque lien mène à la page officielle de cet endroit.'
+      : 'Grouped by province and territory. Each link opens that place’s official page.';
+  String get provincesHeading => isFr ? 'Provinces' : 'Provinces';
+  String get territoriesHeading => isFr ? 'Territoires' : 'Territories';
   String get unofficialMap => isFr
       ? 'Carte d’étude, pas un avis juridique.'
       : 'Study map, not legal advice.';
@@ -246,23 +253,20 @@ class S {
       : 'Below this unofficial study threshold. Review, then try again.';
   String get bookmarkTopic =>
       isFr ? 'Enregistrer ce sujet' : 'Bookmark this topic';
-  String get removeBookmark =>
-      isFr ? 'Retirer le signet' : 'Remove bookmark';
+  String get removeBookmark => isFr ? 'Retirer le signet' : 'Remove bookmark';
   String get savedTopics =>
       isFr ? 'Sujets enregistrés et à revoir' : 'Saved and weak topics';
-  String get weakTopicsLead =>
-      isFr ? 'Questions manquées' : 'Missed questions';
+  String get weakTopicsLead => isFr ? 'Questions manquées' : 'Missed questions';
   String get weakTopicsBody => isFr
       ? 'Les sujets manqués sont enregistrés sur l’appareil. Vous pouvez aussi les marquer pour les revoir.'
       : 'Missed topics are stored on this device. You can also bookmark them to review later.';
-  String get saveMissedTopics => isFr
-      ? 'Enregistrer les sujets manqués'
-      : 'Save missed topics';
+  String get saveMissedTopics =>
+      isFr ? 'Enregistrer les sujets manqués' : 'Save missed topics';
   String get saveTopic => isFr ? 'Enregistrer' : 'Save topic';
-  String get topicsSaved =>
-      isFr ? 'Sujets enregistrés sur l’appareil.' : 'Topics saved on this device.';
-  String reviewTopic(String name) =>
-      isFr ? 'Revoir : $name' : 'Review: $name';
+  String get topicsSaved => isFr
+      ? 'Sujets enregistrés sur l’appareil.'
+      : 'Topics saved on this device.';
+  String reviewTopic(String name) => isFr ? 'Revoir : $name' : 'Review: $name';
   String get practiceSavedTopics =>
       isFr ? 'Pratiquer les sujets enregistrés' : 'Practice saved topics';
   String missedCount(int n) => isFr ? '$n manquée(s)' : '$n missed';

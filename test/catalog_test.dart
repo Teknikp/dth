@@ -15,6 +15,13 @@ import 'package:licence_prep/models/quiz.dart';
 import 'package:licence_prep/models/study.dart';
 
 void main() {
+  test('Play applicationId is the locked package name, not a template id', () {
+    final gradle = File('android/app/build.gradle.kts').readAsStringSync();
+    expect(gradle, contains('applicationId = "ca.dth.licence_prep"'));
+    expect(gradle, isNot(contains('com.example')));
+    expect(File('android/key.properties.example').existsSync(), isTrue);
+  });
+
   test('covers all 13 provinces and territories', () {
     expect(
       allJurisdictions.map((j) => j.code).toSet(),

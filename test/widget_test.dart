@@ -344,45 +344,201 @@ void main() {
     expect(prefs.getString('licence_prep.progress.v1'), isNull);
   });
 
-  testWidgets('mock result shows unofficial percent and can save a weak topic', (
+  testWidgets(
+    'mock result shows unofficial percent and can save a weak topic',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final state = await AppState.load();
+      final questions = questionsForQuiz(signsQuiz).take(5).toList();
+      final wrong =
+          (questions.first.correctIndex + 1) % questions.first.choices.length;
+      await tester.pumpWidget(
+        AppScope(
+          state: state,
+          child: ListenableBuilder(
+            listenable: state,
+            builder: (context, _) {
+              return MaterialApp(
+                theme: AppTheme.light(),
+                home: QuizResultScreen(
+                  quiz: mockQuiz,
+                  questions: questions,
+                  score: 4,
+                  answers: {
+                    0: wrong,
+                    for (var i = 1; i < questions.length; i++)
+                      i: questions[i].correctIndex,
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('mock-percent')), findsOneWidget);
+      expect(find.textContaining('Score: 80%'), findsOneWidget);
+      expect(find.byKey(const Key('mock-threshold')), findsOneWidget);
+      expect(
+        find.textContaining('Unofficial study threshold: 80%'),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('save-missed-topics')));
+      await tester.pumpAndSettle();
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getString('licence_prep.study.v1'), contains('signs'));
+    },
+  );
+
+  testWidgets('cold start holds branded splash about 2.5 seconds', (
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
-    final state = await AppState.load();
-    final questions = questionsForQuiz(signsQuiz).take(5).toList();
-    final wrong =
-        (questions.first.correctIndex + 1) % questions.first.choices.length;
-    await tester.pumpWidget(
-      AppScope(
-        state: state,
-        child: ListenableBuilder(
-          listenable: state,
-          builder: (context, _) {
-            return MaterialApp(
-              theme: AppTheme.light(),
-              home: QuizResultScreen(
-                quiz: mockQuiz,
-                questions: questions,
-                score: 4,
-                answers: {
-                  0: wrong,
-                  for (var i = 1; i < questions.length; i++)
-                    i: questions[i].correctIndex,
-                },
-              ),
-            );
-          },
-        ),
-      ),
+    await tester.pumpWidget(const LicencePrepApp());
+    expect(find.byKey(const Key('branded-splash')), findsOneWidget);
+    expect(find.text('Licence Prep'), findsOneWidget);
+    expect(find.text('Prépa Permis'), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 800));
+    expect(find.byKey(const Key('branded-splash')), findsOneWidget);
+    expect(find.text('Canadian licence prep'), findsNothing);
+
+    await tester.pump(const Duration(milliseconds: 1800));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('branded-splash')), findsNothing);
+    expect(find.text('Canadian licence prep'), findsOneWidget);
+  });
+
+  testWidgets('progress step sheet uses previous and next, not back or clear', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await pumpApp(tester);
+    await tester.tap(find.byKey(const Key('nav-progress')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('goal-province')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ontario').last);
+    await tester.pumpAndSettle();
+
+    final knowledge = find.byKey(const Key('check-ON.knowledge'));
+    await tester.ensureVisible(knowledge);
+    await tester.pumpAndSettle();
+    await tester.tap(knowledge);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Back to the map'), findsNothing);
+    expect(find.text('Clear this stop'), findsNothing);
+    expect(find.text('Previous step'), findsOneWidget);
+    expect(find.text('Next step'), findsOneWidget);
+    expect(find.text('Pass the knowledge test'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('stop-previous')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Parental consent if you are under the local age'),
+      findsOneWidget,
     );
+
+    await tester.tap(find.byKey(const Key('stop-next')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('mock-percent')), findsOneWidget);
-    expect(find.textContaining('Score: 80%'), findsOneWidget);
-    expect(find.byKey(const Key('mock-threshold')), findsOneWidget);
-    expect(find.textContaining('Unofficial study threshold: 80%'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('save-missed-topics')));
+    expect(find.text('Pass the knowledge test'), findsOneWidget);
+
+    expect(find.text('Reset checkboxes'), findsOneWidget);
+  });
+
+  testWidgets(
+    'About lists official sources under each province and territory',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await pumpApp(tester);
+      await tester.tap(find.byKey(const Key('nav-about')));
+      await tester.pumpAndSettle();
+
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('about-sources-lead')),
+        400,
+        scrollable: verticalScroll(const Key('about-list')),
+      );
+      expect(find.text('Official sources'), findsOneWidget);
+      expect(find.byKey(const Key('about-sources-lead')), findsOneWidget);
+      expect(find.text('Provinces'), findsOneWidget);
+
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('about-sources-ON')),
+        400,
+        scrollable: verticalScroll(const Key('about-list')),
+      );
+      expect(find.byKey(const Key('about-sources-ON')), findsOneWidget);
+      expect(
+        find.text('Get a G driver’s licence (new drivers)'),
+        findsOneWidget,
+      );
+
+      await tester.scrollUntilVisible(
+        find.text('Territories'),
+        400,
+        scrollable: verticalScroll(const Key('about-list')),
+      );
+      expect(find.text('Territories'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('about-sources-YT')),
+        400,
+        scrollable: verticalScroll(const Key('about-list')),
+      );
+      expect(find.byKey(const Key('about-sources-YT')), findsOneWidget);
+    },
+  );
+
+  testWidgets('French About and progress sheet labels', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    SharedPreferences.setMockInitialValues({});
+    final state = await AppState.load();
+    await tester.pumpWidget(LicencePrepApp(state: state));
     await tester.pumpAndSettle();
-    final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getString('licence_prep.study.v1'), contains('signs'));
+    await tester.tap(find.byKey(const Key('lang-fr')).first);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('nav-progress')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('goal-province')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ontario').last);
+    await tester.pumpAndSettle();
+    final documents = find.byKey(const Key('check-ON.documents'));
+    await tester.ensureVisible(documents);
+    await tester.pumpAndSettle();
+    await tester.tap(documents);
+    await tester.pumpAndSettle();
+    expect(find.text('Étape précédente'), findsOneWidget);
+    expect(find.text('Étape suivante'), findsOneWidget);
+    expect(find.text('Retour à la carte'), findsNothing);
+    Navigator.of(tester.element(find.byKey(const Key('stop-next')))).pop();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('nav-about')));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Sources officielles'),
+      400,
+      scrollable: verticalScroll(const Key('about-list')),
+    );
+    expect(find.text('Sources officielles'), findsOneWidget);
+    expect(
+      find.textContaining('Groupées par province et territoire'),
+      findsOneWidget,
+    );
   });
 }

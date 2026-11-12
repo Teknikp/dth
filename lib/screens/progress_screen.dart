@@ -171,7 +171,9 @@ class _MapPanel extends StatelessWidget {
                     const Duration(milliseconds: 2000),
                   );
                 }
-                if (context.mounted) _openStop(context, item, true);
+                if (!context.mounted) return;
+                final index = items.indexWhere((e) => e.id == item.id);
+                await _openStop(context, items, index < 0 ? 0 : index);
               },
             ),
           ),
@@ -196,10 +198,7 @@ class _MapPanel extends StatelessWidget {
               Expanded(
                 child: TextButton(
                   onPressed: () => AppScope.of(context).resetChecks(),
-                  child: Text(
-                    s.resetChecks,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  child: Text(s.resetChecks, overflow: TextOverflow.ellipsis),
                 ),
               ),
             ],
@@ -211,55 +210,13 @@ class _MapPanel extends StatelessWidget {
 
   Future<void> _openStop(
     BuildContext context,
-    ProgressItemDef item,
-    bool checked,
-  ) async {
-    final s = AppScope.s(context);
-    final locale = AppScope.of(context).locale;
-    await showModalBottomSheet<void>(
+    List<ProgressItemDef> items,
+    int index,
+  ) {
+    return showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (sheet) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                item.title(locale),
-                style: Theme.of(sheet).textTheme.titleLarge,
-              ),
-              if (item.detail(locale).isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Text(item.detail(locale)),
-              ],
-              if (item.kind == ProgressItemKind.wait) ...[
-                const SizedBox(height: 8),
-                Text(
-                  s.gdlWaitNotBooking,
-                  style: Theme.of(sheet).textTheme.bodySmall,
-                ),
-              ],
-              const SizedBox(height: 8),
-              Text(s.unofficialMap, style: Theme.of(sheet).textTheme.bodySmall),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: () => Navigator.pop(sheet),
-                child: Text(s.backToMap),
-              ),
-              if (checked)
-                TextButton(
-                  onPressed: () {
-                    AppScope.of(context).toggleCheck(item.id, done: false);
-                    Navigator.pop(sheet);
-                  },
-                  child: Text(s.clearStop),
-                ),
-            ],
-          ),
-        );
-      },
+      builder: (_) => _StopSheet(items: items, initialIndex: index),
     );
   }
 
@@ -329,6 +286,97 @@ class _MapPanel extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _StopSheet extends StatefulWidget {
+  const _StopSheet({required this.items, required this.initialIndex});
+
+  final List<ProgressItemDef> items;
+  final int initialIndex;
+
+  @override
+  State<_StopSheet> createState() => _StopSheetState();
+}
+
+class _StopSheetState extends State<_StopSheet> {
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    final last = widget.items.length - 1;
+    _index = widget.initialIndex < 0
+        ? 0
+        : (widget.initialIndex > last ? last : widget.initialIndex);
+  }
+
+  ProgressItemDef get _item => widget.items[_index];
+
+  bool get _isFirst => _index <= 0;
+
+  bool get _isLast => _index >= widget.items.length - 1;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = AppScope.s(context);
+    final locale = AppScope.of(context).locale;
+    final item = _item;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            item.title(locale),
+            key: const Key('stop-title'),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          if (item.detail(locale).isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(item.detail(locale)),
+          ],
+          if (item.kind == ProgressItemKind.wait) ...[
+            const SizedBox(height: 8),
+            Text(
+              s.gdlWaitNotBooking,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+          const SizedBox(height: 8),
+          Text(s.unofficialMap, style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  key: const Key('stop-previous'),
+                  onPressed: _isFirst
+                      ? null
+                      : () => setState(() => _index -= 1),
+                  child: Text(s.previousStep, overflow: TextOverflow.ellipsis),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: FilledButton(
+                  key: const Key('stop-next'),
+                  onPressed: () {
+                    if (_isLast) {
+                      Navigator.pop(context);
+                    } else {
+                      setState(() => _index += 1);
+                    }
+                  },
+                  child: Text(s.nextStep, overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
